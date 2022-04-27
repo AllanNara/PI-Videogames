@@ -8,18 +8,6 @@ const axios = require('axios');
 router.get('/', async (req, res, next) => {
     const { name } = req.query
     try {
-        // const response = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`);
-        // const data = [];
-        // response.data.results.forEach(elem => {
-        //     let genres = elem.genres.map(e => e.name)
-        //     data.push({name: elem.name, image: elem.background_image, genres: genres})
-        // })
-        // res.json(data)
-        // res.json(response.data.results)
-        // res.json(response.data.results[0].name) --> "Grand Theft Auto V"
-        // res.json(response.data.results[0].background_image) //--> "(...).jgp"
-        // res.json(response.data.results[0].genres) //--> [{name: action}, {name: adventure}]
-
         if(!name) {
             const response = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`);
             const data = [];
@@ -27,7 +15,7 @@ router.get('/', async (req, res, next) => {
                 let genres = elem.genres.map(e => e.name)
                 data.push({name: elem.name, image: elem.background_image, genres: genres})
             })
-            res.json(data)
+            return res.json(data)
         } else {
             const response = await axios.get(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`);
             const data = [];
@@ -35,7 +23,7 @@ router.get('/', async (req, res, next) => {
                 let genres = elem.genres.map(e => e.name)
                 data.push({name: elem.name, image: elem.background_image, genres: genres})
             })
-            res.json(data)
+            return data.length ? res.json(data) : res.status(404).json({ERROR: "Game not found"})
         }
     } catch (error) {
         next(error)
