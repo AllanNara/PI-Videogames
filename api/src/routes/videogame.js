@@ -1,5 +1,8 @@
+require('dotenv').config()
 const { Router } = require('express');
 const router = Router();
+const { API_KEY } = process.env;
+  
 
 // Obtener el detalle de un videojuego en particular
 // Debe traer solo los datos pedidos en la ruta de detalle de videojuego
@@ -23,3 +26,11 @@ router.post('/', (req, res, next) => {
 });
 
 module.exports = router
+
+// Ruta de detalle de videojuego: debe contener
+// [ ] Los campos mostrados en la ruta principal para cada videojuegos (imagen, nombre, y géneros)
+// [ ] Descripción
+// [ ] Fecha de lanzamiento
+// [ ] Rating
+// [ ] Plataformas
+// [ ] GENEROS
