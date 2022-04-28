@@ -15,7 +15,7 @@ router.get('/', async (req, res, next) => {
         else {
             const dataApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
             const promises = dataApi.data.results.map(elem => Genre.findOrCreate({
-                where: {id: elem.id, name: elem.name}
+                where: {id: elem.id, name: elem.name.toLowerCase()}
             }));
             await Promise.all(promises)
                 .then(data => {
