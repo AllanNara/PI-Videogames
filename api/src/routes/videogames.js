@@ -12,16 +12,16 @@ router.get('/', async (req, res, next) => {
             const response = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`);
             const data = [];
             response.data.results.forEach(elem => {
-                let genres = elem.genres.map(e => e.name)
-                data.push({name: elem.name, image: elem.background_image, genres: genres})
+                let Allgenres = elem.genres.map(e => e.name)
+                data.push({name: elem.name, image: elem.background_image, genres: Allgenres})
             })
             return res.json(data)
         } else {
             const response = await axios.get(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`);
             const data = [];
             response.data.results.forEach(elem => {
-                let genres = elem.genres.map(e => e.name)
-                data.push({name: elem.name, image: elem.background_image, genres: genres})
+                let Allgenres = elem.genres.map(e => e.name)
+                data.push({name: elem.name, image: elem.background_image, genres: Allgenres})
             })
             return data.length ? res.json(data) : res.status(404).json({ERROR: "Game not found"})
         }

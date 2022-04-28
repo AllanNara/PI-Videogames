@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
       primaryKey: true
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(40),
       allowNull: false,
       unique: true
     },
@@ -20,15 +20,28 @@ module.exports = (sequelize) => {
     },
     released: {
       type: DataTypes.DATEONLY,
+      defaultValue: new Date().toISOString().split('T')[0],
+      validate: {
+        isDate: true,
+        isAfter: "1958-10-17",
+        isBefore: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]
+      }
     },
     rating: {
       type: DataTypes.FLOAT,
-      defaultValue: 0
+      defaultValue: 0,
+      validate: {
+        len: [1, 4],
+        min: 0,
+        max: 5,
+        isNumeric: true
+      }
     },
-    plataforms: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }
+    //  POR LA CANTIDAD DE PLATAFORMAS VOY A COPIARLAS DE LA API
+    // plataforms: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // }
   },
   {
     timestamps: false
