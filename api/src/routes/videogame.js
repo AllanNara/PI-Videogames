@@ -21,11 +21,12 @@ router.get('/:idVideogame', async (req, res, next) => {
         
         const response = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
         const data = {};
+        // console.log(response.data)
         let genresArry = response.data.genres.map(genere => genere.name)
         data.name = response.data.name;
         data.image = response.data.background_image;
         data.genres = genresArry;
-        data.description = response.data.description;
+        data.description = response.data.description_raw;
         data.released = response.data.released;
         data.rating = response.data.rating;
         data.platforms = response.data.platforms;

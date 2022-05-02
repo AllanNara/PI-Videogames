@@ -11,9 +11,10 @@ router.get('/', async (req, res, next) => {
         if(!name) {
             const response = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`);
             const data = [];
+            // console.log(response.data.results)
             response.data.results.forEach(elem => {
                 let Allgenres = elem.genres.map(e => e.name)
-                data.push({name: elem.name, image: elem.background_image, genres: Allgenres})
+                data.push({name: elem.name, image: elem.background_image, genres: Allgenres, id: elem.id})
             })
             return res.json(data)
         } else {
