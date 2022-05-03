@@ -1,5 +1,14 @@
-import { GET_GAMES_NAME, GET_VIDEOGAMES, GET_GAME_DETAIL, IS_LOADING, CLEAR_STATE } from "../action-types";
 import axios from 'axios';
+import {
+    POST_NEW_GAME, 
+    GET_GAMES_NAME, 
+    GET_VIDEOGAMES, 
+    GET_GAME_DETAIL, 
+    IS_LOADING, 
+    CLEAR_STATE,
+    GET_ALL_GENRES,
+    GET_ALL_PLATFORMS
+} from "../action-types";
 
 export function getVideogames() {
     return (dispatch) => {
@@ -32,6 +41,36 @@ export function getGameDetail(id) {
                 payload: response.data
             });dispatch(isLoading(false))});
     };
+};
+
+export function getAllGenres() {
+    return (dispatch) => {
+        axios.get(`http://localhost:3001/genres`)
+            .then(response => {dispatch({
+                type:GET_ALL_GENRES,
+                payload: response.data
+            })})
+    }
+};
+
+export function getAllPlatforms() {
+    return(dispatch) => {
+        axios.get(`http://localhost:3001/platforms`)
+            .then(response => {dispatch({
+                type: GET_ALL_PLATFORMS,
+                payload: response.data
+            })})
+    }
+};
+
+export function postNewGame(form) {
+    return (dispatch) => {
+        axios.post(`http://localhost:3001/videogame/`, form)
+            .then(response => dispatch({
+                type: POST_NEW_GAME,
+                payload: response.data
+            }))
+    }
 };
 
 export function isLoading(payload) {

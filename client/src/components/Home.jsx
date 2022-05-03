@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { getVideogames } from "../redux/action";
 import { useSelector, useDispatch } from 'react-redux'
 import Card from "./Card";
@@ -7,11 +7,10 @@ export default function Main() {
     const dispatch = useDispatch();
     const games = useSelector(state => state.allVideogames);
 
-    React.useEffect(() => {
+    useEffect(() => {
         dispatch(getVideogames())
     }, [dispatch])
 
-    // console.log(games)
     return (
         <>
          <h1>HOME</h1>
@@ -20,7 +19,8 @@ export default function Main() {
                     name={game.name} 
                     genres={game.genres} 
                     img={game.image} 
-                    id={game.id} 
+                    id={game.id}
+                    key={game.id}
                 />
             )}
         </>

@@ -15,7 +15,7 @@ export default function GameDetail() {
     // const response = detail.genres.map(elem =>{return `<li>${elem}</li>`})
     // console.log(id)
     // console.log('Genres :', detail.genres)
-    console.log('Platforms :', detail.platforms)
+    // console.log('Platforms :', detail.platforms)
     // console.log('GENRES MAP :', response)
 
     return ( 

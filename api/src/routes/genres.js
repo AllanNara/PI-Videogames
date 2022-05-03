@@ -10,12 +10,11 @@ const { Genre } = require('../db')
 router.get('/', async (req, res, next) => {
     try {
         const response = await Genre.findAll();
-        // console.log(response)
         if(response.length) return res.json(response);
         else {
             const dataApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
             const promises = dataApi.data.results.map(elem => Genre.findOrCreate({
-                where: {id: elem.id, name: elem.name.toLowerCase()}
+                where: {id: elem.id, name: elem.name}
             }));
             await Promise.all(promises)
                 .then(data => {
@@ -29,3 +28,36 @@ router.get('/', async (req, res, next) => {
 });
 
 module.exports = router
+
+
+
+// //PLATFORMS.JS
+// const { Router } = require('express');
+// const router = Router();
+// const { API_KEY } = process.env;
+// const axios = require('axios');
+// const { Platform } = require('../db')  
+
+// router.get('/', async (req, res, next) => {
+//     try {
+//         const response = await Platform.findAll();
+//         if(response.length) return res.json(response);
+//         else {
+//             const dataApi = await axios.get(`https://api.rawg.io/api/platforms?key=${API_KEY}`)
+//             const dataApi2 = await axios.get(`https://api.rawg.io/api/platforms?key=${API_KEY}&page=2`)
+//             dataApi2.data.results.forEach(elem => dataApi.data.results.push(elem))
+//             const promises = dataApi.data.results.map(elem => Platform.findOrCreate({
+//                 where: {id: elem.id, name: elem.name}
+//             }));
+//             await Promise.all(promises)
+//             .then(data => {
+//                 const result = data.map(elem => elem[0]);
+//                 return res.json(result)
+//             })
+//         }
+//     } catch (error) {
+//         next(error)
+//     }
+// });
+
+// module.exports = router

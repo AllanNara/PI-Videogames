@@ -38,8 +38,8 @@ module.exports = (sequelize) => {
       }
     },
     //  POR LA CANTIDAD DE PLATAFORMAS VOY A COPIARLAS DE LA API
-    // plataforms: {
-    //   type: DataTypes.STRING,
+    // platforms: {
+    //   type: DataTypes.ARRAY(DataTypes.TEXT),
     //   allowNull: false,
     // }
   },

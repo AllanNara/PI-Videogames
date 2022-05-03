@@ -3,7 +3,7 @@ const axios = require('axios');
 const { Router } = require('express');
 const router = Router();
 const { API_KEY } = process.env;
-const { Videogame, Genre } = require('../db')  
+const { Videogame, Genre, Platform } = require('../db')  
 
 // Obtener el detalle de un videojuego en particular
 // Debe traer solo los datos pedidos en la ruta de detalle de videojuego
@@ -15,13 +15,11 @@ router.get('/:idVideogame', async (req, res, next) => {
         
         if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idVideogame)){
             const findInDB = await Videogame.findByPk(idVideogame);
-            console.log(findInDB)
             return findInDB ? res.json(findInDB.toJSON()) : res.status(404).json({Error: 'Data not found'})
         }
         
         const response = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
         const data = {};
-        // console.log(response.data)
         let genresArry = response.data.genres.map(genere => genere.name)
         data.name = response.data.name;
         data.image = response.data.background_image;
@@ -45,13 +43,20 @@ router.post('/', async (req, res, next) => {
     try {
 
         const newVideogame = await Videogame.create(req.body);
-        let promises = req.body.genre.map(elem => Genre.findOne({
-            where: { name: elem.toLowerCase() }
+        let genresGame = req.body.genres.map(elem => Genre.findOne({
+            where: { name: elem }
+        }));
+        let platformsGame = req.body.platforms.map(elem => Platform.findOne({
+            where: { name: elem }
         }));
 
-        await Promise.all(promises).then(e => {
+        await Promise.all(genresGame).then(e => {
             let data = e.map(dts => dts.toJSON());
             data.forEach(async e => await newVideogame.addGenre(e.id));
+        })
+        await Promise.all(platformsGame).then(e => {
+            let data = e.map(dts => dts.toJSON());
+            data.forEach(async e => await newVideogame.addPlatform(e.id));
             res.json(newVideogame);
         })
 
