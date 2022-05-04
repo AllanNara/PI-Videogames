@@ -1,25 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getGameDetail } from "../redux/action";
+import { getGameDetail, clearState } from "../redux/action";
 
 export default function GameDetail() {
-    const dispatch = useDispatch();
     const detail = useSelector(state => state.gameDetail)
+    const loading = useSelector(state => state.stateLoading);
+    const dispatch = useDispatch();
     const { id } = useParams()
 
     useEffect(() => {
         dispatch(getGameDetail(id));
+        return () => dispatch(clearState())
     },[id, dispatch])
-    
-    // const response = detail.genres.map(elem =>{return `<li>${elem}</li>`})
-    // console.log(id)
-    // console.log('Genres :', detail.genres)
-    // console.log('Platforms :', detail.platforms)
-    // console.log('GENRES MAP :', response)
+
+    function* generatorKey() {
+        let number = 100000;
+        while(true) {
+            number++;
+            yield number
+        }
+    };
+    const keyForChild = generatorKey();
 
     return ( 
         <>
+        {loading ? <span>Loading...</span> : 
          <div>
              <div>
                 <h1>{detail.name}</h1>
@@ -34,19 +40,26 @@ export default function GameDetail() {
                      <li>
                          Genres:
                         <ul>
-                            {detail.genres ? detail.genres.map(elem => <li>{elem}</li>) : null}
+                            {detail.genres ?
+                             detail.genres.length ?
+                             detail.genres.map(elem => <li key={keyForChild.next().value}>{elem}</li>) : <li>No existen generos asociados</li>
+                             : <li>Cargando generos...</li>}
                         </ul>
                      </li>
                      <li>
                          Platforms:
                         <ul>
-                            {detail.platforms ? detail.platforms.map(elem => <li>{elem.platform.name}</li>) : null}
+                            {detail.platforms ?
+                             detail.platforms.length ?
+                             detail.platforms.map(elem => <li key={keyForChild.next().value}>{elem}</li>) : <li>No existen plataformas asociadas</li>
+                             : <li>Cargando generos...</li>}
                         </ul>
                      </li>
                      
                  </ul>
              </div>
          </div>
+        }
         </>
     )
 }

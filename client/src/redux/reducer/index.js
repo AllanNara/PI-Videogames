@@ -11,7 +11,7 @@ import {
 
 const initialState = {
     allVideogames: [],
-    gameDetail: [],
+    gameDetail: {},
     gamesByName: [],
     allGenres: [],
     allPlatforms: [],
@@ -19,7 +19,7 @@ const initialState = {
     stateLoading: undefined
 }
 
-export default function rootReducer(state = initialState, { type, payload}) {
+export default function rootReducer(state = initialState, { type, payload }) {
     switch (type) {
         case GET_VIDEOGAMES:
             return {
@@ -58,7 +58,8 @@ export default function rootReducer(state = initialState, { type, payload}) {
             };
         case CLEAR_STATE:
             return {
-                ...state
+                ...state,
+                gameDetail: {}
             };
         default: return state
     }

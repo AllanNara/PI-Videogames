@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import Card from "./Card";
 
 export default function Main() {
-    const dispatch = useDispatch();
     const games = useSelector(state => state.allVideogames);
+    const loading = useSelector(state => state.stateLoading);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getVideogames())
@@ -14,7 +15,8 @@ export default function Main() {
     return (
         <>
          <h1>HOME</h1>
-            {games.map(game => 
+         {loading ? <span>Loading...</span> : 
+            games.map(game => 
                 <Card 
                     name={game.name} 
                     genres={game.genres} 
@@ -22,7 +24,9 @@ export default function Main() {
                     id={game.id}
                     key={game.id}
                 />
-            )}
+            )      
+         }
+
         </>
     )
 }

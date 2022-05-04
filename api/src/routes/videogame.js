@@ -14,20 +14,35 @@ router.get('/:idVideogame', async (req, res, next) => {
     try {
         
         if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idVideogame)){
-            const findInDB = await Videogame.findByPk(idVideogame);
-            return findInDB ? res.json(findInDB.toJSON()) : res.status(404).json({Error: 'Data not found'})
+            const findInDB = await Videogame.findByPk(idVideogame, { include: [Genre, Platform] });
+            const gameDataBase = findInDB.toJSON();
+            console.log(gameDataBase);
+            const data = {};
+            let genresArray = gameDataBase.genres.map(genere => genere.name);
+            let platformsArray = gameDataBase.platforms.map(platform => platform.name);
+            data.name = gameDataBase.name;
+            data.image = gameDataBase.image;
+            data.genres = genresArray;
+            data.description = gameDataBase.description;
+            data.released = gameDataBase.released;
+            data.rating = gameDataBase.rating;
+            data.platforms = platformsArray;
+            console.log(data);
+            return findInDB ? res.json(data) : res.status(404).json({Error: 'Data not found'})
         }
         
         const response = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
         const data = {};
-        let genresArry = response.data.genres.map(genere => genere.name)
+        let genresArray = response.data.genres.map(genre => genre.name)
+        let platformsArray = response.data.platforms.map(platform => platform.platform.name)
         data.name = response.data.name;
         data.image = response.data.background_image;
-        data.genres = genresArry;
+        data.genres = genresArray;
         data.description = response.data.description_raw;
         data.released = response.data.released;
         data.rating = response.data.rating;
-        data.platforms = response.data.platforms;
+        data.platforms = platformsArray;
+        console.log(data);
         res.json(data)
     } catch (error) {
         next(error)

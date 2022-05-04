@@ -37,6 +37,10 @@ module.exports = (sequelize) => {
         isNumeric: true
       }
     },
+    //APARTADO PARA IMAGEN
+    image: {
+      type: DataTypes.TEXT
+    }
     //  POR LA CANTIDAD DE PLATAFORMAS VOY A COPIARLAS DE LA API
     // platforms: {
     //   type: DataTypes.ARRAY(DataTypes.TEXT),
