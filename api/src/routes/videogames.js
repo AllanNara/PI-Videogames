@@ -4,7 +4,6 @@ const router = Router();
 const { API_KEY } = process.env;
 const { Videogame, Genre, Op } = require('../db')  
 const axios = require('axios');
-// const { Op } = require('sequelize/types');
 
 router.get('/', async (req, res, next) => {
     const { name } = req.query
@@ -36,7 +35,8 @@ router.get('/', async (req, res, next) => {
         for(let i = 0; i < 4; i++) {
             const nexts = await axios.get(main.data.next)
             main.data.results = [...main.data.results, ...nexts.data.results]
-        }
+        };
+        
         const data = [];
         main.data.results.forEach(elem => {
             let allGenres = elem.genres.map(e => e.name)

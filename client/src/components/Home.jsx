@@ -12,6 +12,15 @@ export default function Main() {
         dispatch(getVideogames())
     }, [dispatch])
 
+    function* generatorKey() {
+        let number = 100000;
+        while(true) {
+            number++;
+            yield number
+        }
+    };
+    const keyForChild = generatorKey();
+    
     return (
         <>
          <h1>HOME</h1>
@@ -22,7 +31,7 @@ export default function Main() {
                     genres={game.genres} 
                     img={game.image} 
                     id={game.id}
-                    key={game.id}
+                    key={keyForChild.next().value}
                 />
             )      
          }

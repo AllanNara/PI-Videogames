@@ -9,6 +9,8 @@ export default function GameDetail() {
     const dispatch = useDispatch();
     const { id } = useParams()
 
+    console.log(detail)
+
     useEffect(() => {
         dispatch(getGameDetail(id));
         return () => dispatch(clearState())
