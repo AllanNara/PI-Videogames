@@ -2,30 +2,59 @@ require('dotenv').config();
 const { Router } = require('express');
 const router = Router();
 const { API_KEY } = process.env;
+const { Videogame, Genre, Op } = require('../db')  
 const axios = require('axios');
+// const { Op } = require('sequelize/types');
 
-//GET /videogames  &&  /videogames?name="..."
 router.get('/', async (req, res, next) => {
     const { name } = req.query
+    
     try {
-        if(!name) {
-            const response = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`);
-            const data = [];
-            // console.log(response.data.results)
-            response.data.results.forEach(elem => {
-                let Allgenres = elem.genres.map(e => e.name)
-                data.push({name: elem.name, image: elem.background_image, genres: Allgenres, id: elem.id})
-            })
-            return res.json(data)
-        } else {
-            const response = await axios.get(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`);
-            const data = [];
-            response.data.results.forEach(elem => {
-                let Allgenres = elem.genres.map(e => e.name)
-                data.push({name: elem.name, image: elem.background_image, genres: Allgenres})
-            })
-            return data.length ? res.json(data) : res.status(404).json({ERROR: "Game not found"})
+        const options = !name ?
+        { include: Genre, attributes: {exclude: ['rating', 'released', 'description']} } :
+        { include: Genre, attributes: {exclude: ['rating', 'released', 'description']}, where: {name: {[Op.substring]: name }} }
+
+        const allDataBase = await Videogame.findAll(options)
+
+        const dataBase = [];
+        allDataBase.forEach(elem => {
+            let { id, name, isDataBase, image, genres } = elem.toJSON();
+            let allGenres = genres.map(e => e.name);
+            dataBase.push({
+                id,
+                name,
+                isDataBase,
+                image,
+                genres: allGenres
+            });
+        });
+
+        const main = !name ?
+         await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`) 
+         : await axios.get(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`);
+         
+        for(let i = 0; i < 4; i++) {
+            const nexts = await axios.get(main.data.next)
+            main.data.results = [...main.data.results, ...nexts.data.results]
         }
+        const data = [];
+        main.data.results.forEach(elem => {
+            let allGenres = elem.genres.map(e => e.name)
+            data.push({
+                id: elem.id,
+                name: elem.name,
+                isDataBase: false,
+                image: elem.background_image, 
+                genres: allGenres, 
+            });
+        });
+
+        const result = [...data, ...dataBase];
+
+         return !name ?
+          res.json(result) 
+          : result.length ?
+           res.json(result) : res.status(404).json({ERROR: "Game not found"});
     } catch (error) {
         next(error)
     }

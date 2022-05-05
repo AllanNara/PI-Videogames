@@ -6,7 +6,8 @@ import {
     IS_LOADING, 
     CLEAR_STATE,
     GET_ALL_GENRES,
-    GET_ALL_PLATFORMS
+    GET_ALL_PLATFORMS,
+    GET_ALL_GAMES_DB
 } from "../action-types";
 
 const initialState = {
@@ -50,17 +51,22 @@ export default function rootReducer(state = initialState, { type, payload }) {
             return {
                 ...state,
                 createdGames: [...initialState.createdGames, payload]
-            }
-        case IS_LOADING:
+        };
+        case GET_ALL_GAMES_DB:
             return {
                 ...state,
-                stateLoading: payload
-            };
+                createdGames: payload
+        };
+            case IS_LOADING:
+        return {
+            ...state,
+            stateLoading: payload
+        };
         case CLEAR_STATE:
             return {
                 ...state,
                 gameDetail: {}
             };
         default: return state
-    }
-}
+    }   
+}   

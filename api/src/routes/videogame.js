@@ -10,42 +10,31 @@ const { Videogame, Genre, Platform } = require('../db')
 // Incluir los géneros asociados
 router.get('/:idVideogame', async (req, res, next) => {
     const { idVideogame } = req.params;
-
+    
     try {
-        
+        let findById;
         if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idVideogame)){
-            const findInDB = await Videogame.findByPk(idVideogame, { include: [Genre, Platform] });
-            const gameDataBase = findInDB.toJSON();
-            console.log(gameDataBase);
-            const data = {};
-            let genresArray = gameDataBase.genres.map(genere => genere.name);
-            let platformsArray = gameDataBase.platforms.map(platform => platform.name);
-            data.name = gameDataBase.name;
-            data.image = gameDataBase.image;
-            data.genres = genresArray;
-            data.description = gameDataBase.description;
-            data.released = gameDataBase.released;
-            data.rating = gameDataBase.rating;
-            data.platforms = platformsArray;
-            console.log(data);
-            return findInDB ? res.json(data) : res.status(404).json({Error: 'Data not found'})
+            const inDataBase = await Videogame.findByPk(idVideogame, { include: [Genre, Platform] });
+            findById = inDataBase ? inDataBase.toJSON() : null;
+        } else {
+            const findInApi = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
+            findById = findInApi.data;
         }
-        
-        const response = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
+        if(!findById) return res.status(404).json({ErrorDataBase: 'Game not found'})
+        if(!findById.length) return res.status(404).json({ErrorApi: 'Game not found'})
         const data = {};
-        let genresArray = response.data.genres.map(genre => genre.name)
-        let platformsArray = response.data.platforms.map(platform => platform.platform.name)
-        data.name = response.data.name;
-        data.image = response.data.background_image;
+        let genresArray = findById.genres.map(genere => genere.name);
+        let platformsArray = findById.platforms.map(platform => platform.name);
+        data.name = findById.name;
+        data.image = findById.image;
         data.genres = genresArray;
-        data.description = response.data.description_raw;
-        data.released = response.data.released;
-        data.rating = response.data.rating;
+        data.description = findById.description;
+        data.released = findById.released;
+        data.rating = findById.rating;
         data.platforms = platformsArray;
-        console.log(data);
         res.json(data)
     } catch (error) {
-        next(error)
+    next(error)
     }
 });
 

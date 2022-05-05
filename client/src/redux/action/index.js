@@ -7,10 +7,22 @@ import {
     IS_LOADING, 
     CLEAR_STATE,
     GET_ALL_GENRES,
-    GET_ALL_PLATFORMS
+    GET_ALL_PLATFORMS,
+    GET_ALL_GAMES_DB
 } from "../action-types";
 
 export function getVideogames() {
+    return (dispatch) => {
+        dispatch(isLoading(true));
+        axios.get(`http://localhost:3001/videogames`)
+            .then(response => {dispatch({
+                type: GET_VIDEOGAMES,
+                payload: response.data
+            });dispatch(isLoading(false))});
+    };
+};
+
+export function getAllGamesDB() {
     return (dispatch) => {
         dispatch(isLoading(true));
         axios.get(`http://localhost:3001/videogames`)

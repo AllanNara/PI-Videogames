@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { postNewGame, getAllGenres, getAllPlatforms } from "../redux/action";
 
 export default function CreationForm() {
     const dispatch = useDispatch();
-    const history = useHistory();
-    const createdGame = useSelector(state => state.createdGames)
+    // const history = useHistory();
+    // const createdGame = useSelector(state => state.createdGames)
     const genresList = useSelector(state => state.allGenres);
     const platformsList = useSelector(state => state.allPlatforms);
     const [errors, setErrors] = useState({});

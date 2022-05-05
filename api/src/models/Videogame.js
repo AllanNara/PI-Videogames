@@ -37,6 +37,10 @@ module.exports = (sequelize) => {
         isNumeric: true
       }
     },
+    isDataBase: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
     //APARTADO PARA IMAGEN
     image: {
       type: DataTypes.TEXT
