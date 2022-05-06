@@ -9,6 +9,7 @@ export default function CreationForm() {
     // const createdGame = useSelector(state => state.createdGames)
     const genresList = useSelector(state => state.allGenres);
     const platformsList = useSelector(state => state.allPlatforms);
+    const games = useSelector(state => state.allVideogames);
     const [errors, setErrors] = useState({});
     const [newGame, setNewGame] = useState({
         name: '',
@@ -19,7 +20,9 @@ export default function CreationForm() {
         image: '',
         released: new Date().toISOString().split('T')[0]
     });
-
+    const nameGames = games.map(elem => elem.name)
+    console.log(nameGames)
+    
     // function details() {
     //     if(createdGame.length) {
     //         setTimeout(() => {history.push(`/home/videogame/${createdGame[createdGame.length - 1].id}`)}, 3000)
@@ -114,7 +117,9 @@ export default function CreationForm() {
             errors.name = 'Name is required'
         } else if(newGame.name > 40) {
             errors.name = 'Name must have only 40 characters'
-        };
+        } else if(nameGames.includes(newGame.name)) {
+            errors.name = 'El nombre ya existe! Por favor elija otro'
+        }
         if(!newGame.description) {
             errors.description = 'Description is required'
         };
@@ -252,7 +257,7 @@ export default function CreationForm() {
                 <input 
                         type="date" 
                         name="released"
-                        defaultValue={new Date().toISOString().split('T')[0]}
+                        value={newGame.released}
                         onChange={handleChange}
                         className={errors.released && 'danger'}
                         min="1958-10-17"
