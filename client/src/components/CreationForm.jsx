@@ -20,21 +20,23 @@ export default function CreationForm() {
         image: '',
         released: new Date().toISOString().split('T')[0]
     });
+    
     const nameGames = games.map(elem => elem.name)
     // console.log(genresList)
     // console.log(platformsList)
-    console.log(games)
+    // console.log(games)
 
     useEffect(() => {
-        // console.log('UseEffect')
+        console.log('UseEffect')
         dispatch(getAllGenres());
         dispatch(getAllPlatforms());
-        dispatch(getVideogames())
         // dispatch(getCreatedGames());
+        dispatch(getVideogames())
     }, [dispatch]);
 
 
-    // console.log(createdGame)
+    // console.log('Juegos Creados : ',createdGame)
+    // console.log('Todos loa juegos : ',games)
 
     const handleChange = (e) => {
         if(typeof newGame[e.target.name] === 'object') {

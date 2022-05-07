@@ -48,6 +48,7 @@ router.get('/', async (req, res, next) => {
             let allGenres = elem.genres.map(e => e.name);
             dataFinal.push({
                 id: elem.id,
+                rating: elem.rating,
                 name: elem.name,
                 isDataBase: !!elem.isDataBase,
                 image: elem.image ? elem.image : elem.background_image,
@@ -55,6 +56,10 @@ router.get('/', async (req, res, next) => {
             })
         });
 
+        dataFinal.sort((a, b) => {
+            return b.rating - a.rating
+        });
+        
         return !name ? 
         res.json(dataFinal) 
         : dataFinal.length ? 

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { clearState, getGamesName, stateError } from "../redux/action";
 import Card from "./Card";
-import { SearchBar } from "./SearchBar";
 
 export function SearchByName() {
     const dispatch = useDispatch();
@@ -23,10 +22,6 @@ export function SearchByName() {
 
     return (
         <>
-        <div>
-            <br />
-            <SearchBar />
-        </div>
          {loading ? <span>Loading...</span> :
             error ? 
             <div>
@@ -57,9 +52,7 @@ export function SearchByName() {
                     />
                 )}
             </div>
-   
          }
-
         </>
     )
 }

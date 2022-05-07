@@ -52,7 +52,7 @@ export default function rootReducer(state = initialState, { type, payload }) {
         case GET_CREATED_GAMES:
             return {
                 ...state,
-                createdGames: state.createdGames
+                createdGames: state.allVideogames.filter(game => {return game.isDataBase ? game : null})
             }
         case POST_NEW_GAME:
             return {

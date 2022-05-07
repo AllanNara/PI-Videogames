@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getGameDetail, clearState, stateError } from "../redux/action";
@@ -19,6 +19,8 @@ export default function GameDetail() {
             dispatch(stateError(false))            
         }
     },[id, dispatch])
+
+
 
     return ( 
         <>
@@ -56,7 +58,6 @@ export default function GameDetail() {
                      </li>
                      <li>
                          Platforms:
-                         {console.log(detail.platforms)}
                         <ul>
                             {detail.platforms ?
                              detail.platforms.length ?
