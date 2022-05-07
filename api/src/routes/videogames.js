@@ -16,15 +16,30 @@ router.get('/', async (req, res, next) => {
         const callDataBase = await Videogame.findAll(options);
         const resultDataBase = callDataBase.map(elem => elem.toJSON());
 
-        const callApi = !name ?
-        `https://api.rawg.io/api/games?key=${API_KEY}`
-        : `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`;
-
         let resultApi = [];
-        for(let i = 1; i < 6; i++) {
-            const nexts = await axios.get(`${callApi}&page=${i}`);
-            resultApi = [...resultApi, ...nexts.data.results];
-            if(!nexts.data.next) break;
+        if(!name) {
+            const callApi = `https://api.rawg.io/api/games?page_size=40&key=${API_KEY}`;
+            const nexts = axios.get(`${callApi}&page=1`);
+            const nexts1 = axios.get(`${callApi}&page=2`);
+            const nexts2 = axios.get(`${callApi}&page=3`);
+            await Promise.all([nexts, nexts1, nexts2])
+                .then(response => {
+                resultApi = [
+                    ...response[0].data.results, 
+                    ...response[1].data.results, 
+                    ...response[2].data.results
+                ];
+                })
+                .catch(error => {
+                return res.status(400).json({error: 'Fatal error!', message: error})
+                });
+        } else {
+            const callApi = `https://api.rawg.io/api/games?search=${name}&page_size=40&key=${API_KEY}`;
+            for(let i = 1; i <= 2; i++) {
+                const nexts = await axios.get(`${callApi}&page=${i}`);
+                resultApi = [...resultApi, ...nexts.data.results];
+                if(!nexts.data.next) break;
+            };      
         };
 
         const final = [...resultApi, ...resultDataBase];

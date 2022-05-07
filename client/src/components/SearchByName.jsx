@@ -1,0 +1,65 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { clearState, getGamesName, stateError } from "../redux/action";
+import Card from "./Card";
+import { SearchBar } from "./SearchBar";
+
+export function SearchByName() {
+    const dispatch = useDispatch();
+    const games = useSelector(state => state.gamesByName);
+    const loading = useSelector(state => state.stateLoading)
+    const error = useSelector(state => state.errorExist)
+    const { name } = useParams()
+
+    useEffect(() => {
+        dispatch(getGamesName(name));
+        return () => {
+            dispatch(clearState());
+            dispatch(stateError(false))
+        }
+    }, [dispatch, name])
+
+
+    return (
+        <>
+        <div>
+            <br />
+            <SearchBar />
+        </div>
+         {loading ? <span>Loading...</span> :
+            error ? 
+            <div>
+                <h1>Resultados de busqueda para "{name}"...</h1>
+                <div>
+                    <h4>Tu busqueda para "{name}" no arrojo resultados.</h4>
+                    <p>Sugerencias:</p>
+                    <ul>
+                        <li>rebisa que el juego este bien escrivido y buelbe a hacer la intentacion :D</li>
+                        <li>Quizas el juego que estas buscando no esta creado... Prueba crearlo tu mismo{" "}
+                            <Link to ='/home/create'>
+                                aqui
+                            </Link> {"!!"} 
+                        </li>
+                        <li>Probablemente el juego no este en nuestra base de datos {`:(`}</li>
+                    </ul>
+                </div>
+            </div> :
+            <div>
+                <h1>Resultados de busqueda para "{name}"...</h1>
+                {games.map(game => 
+                    <Card 
+                        name={game.name} 
+                        genres={game.genres} 
+                        img={game.image} 
+                        id={game.id}
+                        key={game.id}
+                    />
+                )}
+            </div>
+   
+         }
+
+        </>
+    )
+}

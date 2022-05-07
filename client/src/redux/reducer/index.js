@@ -1,21 +1,24 @@
 import { 
-    POST_NEW_GAME, 
     GET_GAMES_NAME, 
+    POST_NEW_GAME, 
     GET_VIDEOGAMES, 
     GET_GAME_DETAIL, 
     IS_LOADING, 
     CLEAR_STATE,
     GET_ALL_GENRES,
     GET_ALL_PLATFORMS,
+    ERROR_EXISTS,
+    GET_CREATED_GAMES
 } from "../action-types";
 
 const initialState = {
+    gamesByName: [],
     allVideogames: [],
     gameDetail: {},
-    gamesByName: [],
     allGenres: [],
     allPlatforms: [],
     createdGames: [],
+    errorExist: false,
     stateLoading: undefined
 }
 
@@ -46,20 +49,31 @@ export default function rootReducer(state = initialState, { type, payload }) {
                 ...state,
                 allPlatforms: payload
             };
+        case GET_CREATED_GAMES:
+            return {
+                ...state,
+                createdGames: state.createdGames
+            }
         case POST_NEW_GAME:
             return {
                 ...state,
-                createdGames: [...initialState.createdGames, payload]
-        };
+                createdGames: [...state.createdGames, payload]
+            };
         case IS_LOADING:
             return {
-            ...state,
-            stateLoading: payload
-        };
+                ...state,
+                stateLoading: payload
+            };
+        case ERROR_EXISTS:
+            return {
+                ...state,
+                errorExist: payload
+            };
         case CLEAR_STATE:
             return {
                 ...state,
-                gameDetail: {}
+                gameDetail: {},
+                gamesByName: []
             };
         default: return state
     }   

@@ -1,13 +1,15 @@
 import axios from 'axios';
 import {
-    POST_NEW_GAME, 
     GET_GAMES_NAME, 
+    POST_NEW_GAME, 
     GET_VIDEOGAMES, 
     GET_GAME_DETAIL, 
     IS_LOADING, 
     CLEAR_STATE,
     GET_ALL_GENRES,
     GET_ALL_PLATFORMS,
+    ERROR_EXISTS,
+    GET_CREATED_GAMES
 } from "../action-types";
 
 export function getVideogames() {
@@ -17,18 +19,28 @@ export function getVideogames() {
             .then(response => {dispatch({
                 type: GET_VIDEOGAMES,
                 payload: response.data
-            });dispatch(isLoading(false))});
+            });dispatch(isLoading(false))})
+            .catch(error => {
+                console.log('Error inesperado');
+                dispatch(stateError(true));
+                dispatch(isLoading(false))
+            });
     };
 };
 
 export function getGamesName(title) {
     return (dispatch) => {
         dispatch(isLoading(true));
-        axios.get(`http:localhost:3001/videogames?name=${title}`)
+        axios.get(`http://localhost:3001/videogames?name=${title}`)
             .then(response => {dispatch({
                 type: GET_GAMES_NAME,
                 payload: response.data
-            });dispatch(isLoading(false))});
+            });dispatch(isLoading(false))})
+            .catch(error => {
+                console.log('Error inesperado');
+                dispatch(stateError(true));
+                dispatch(isLoading(false))
+            });
     };
 };
 
@@ -39,9 +51,21 @@ export function getGameDetail(id) {
             .then(response => {dispatch({
                 type: GET_GAME_DETAIL,
                 payload: response.data
-            });dispatch(isLoading(false))});
+            });dispatch(isLoading(false))})
+            .catch(error => {
+                console.log('Error inesperado');
+                dispatch(stateError(true));
+                dispatch(isLoading(false))
+            });
+            
     };
 };
+
+export function getCreatedGames() {
+    return {
+        type: GET_CREATED_GAMES
+    }
+}
 
 export function getAllGenres() {
     return (dispatch) => {
@@ -66,16 +90,23 @@ export function getAllPlatforms() {
 export function postNewGame(form) {
     return (dispatch) => {
         axios.post(`http://localhost:3001/videogame/`, form)
-            .then(response => dispatch({
+            .then(response => {dispatch({
                 type: POST_NEW_GAME,
                 payload: response.data
-            }))
+            });console.log(response.data)})
     }
 };
 
 export function isLoading(payload) {
     return {
         type: IS_LOADING,
+        payload
+    }
+};
+
+export function stateError(payload) {
+    return {
+        type: ERROR_EXISTS,
         payload
     }
 };

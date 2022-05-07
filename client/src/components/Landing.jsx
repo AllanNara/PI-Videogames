@@ -4,14 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function Landing() {
-    const dispatch = useDispatch()
-    const games = useSelector(state => state.allVideogames);
+    // const dispatch = useDispatch()
+    // const games = useSelector(state => state.allVideogames);
 
-    useEffect(() => {
-        dispatch(getVideogames())
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getVideogames())
+    // }, [dispatch]);
 
-    console.log(games)
+    // console.log(games)
+    // const nameGames = games.map(elem => elem.name)
+    // console.log(nameGames)
 
     return (
         <>

@@ -18,28 +18,30 @@ router.get('/:idVideogame', async (req, res, next) => {
             const inDataBase = await Videogame.findByPk(idVideogame, { include: [Genre, Platform] });
             findById = inDataBase ? inDataBase.toJSON() : null;
             isFromDB = true;
-        } else {
+        } else if(!/^[a-zA-Z\s]*$/.test(idVideogame)){
             const findInApi = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
             findById = findInApi.data;
             isFromDB = false;
         };
         
-        if(!findById) return res.status(404).json({ErrorDataBase: 'Game not found'});
-        if(!Object.keys(findById).length) return res.status(404).json({ErrorApi: 'Game not found'});
+        if(!findById) return res.status(404).json({ERROR: 'Game not found'});
+        // if(!Object.keys(findById).length) return res.status(404).json({ERROR: 'Game not found'});
+        console.log(findById.platforms[0])
+        // console.log(findById.platform)
         const data = {};
-        let genresArray = findById.genres.map(genere => genere.name);
-        let platformsArray = isFromDB ? findById.platforms.map(pl => pl.name) : findById.platforms.map(pl => pl.platform.name);
+        // let genresArray = findById.genres.map(genere => genere.name);
+        let platformsArray = findById.platforms.map(pl => pl.platform);
         data.name = findById.name;
         data.image = isFromDB ? findById.image : findById.background_image;
-        data.genres = genresArray;
+        data.genres = findById.genres;
         data.description = isFromDB ? findById.description : findById.description_raw;
         data.released = findById.released;
         data.rating = findById.rating;
-        data.platforms = platformsArray;
-        console.log(data)
+        data.platforms = isFromDB ? findById.platforms : platformsArray
+        // console.log(data)
         res.json(data)
     } catch (error) {
-    next(error)
+        next(error)
     }
 });
 
@@ -63,7 +65,8 @@ router.post('/', async (req, res, next) => {
         await Promise.all(platformsGame).then(e => {
             let data = e.map(dts => dts.toJSON());
             data.forEach(async e => await newVideogame.addPlatform(e.id));
-            res.json(newVideogame);
+            // console.log(newVideogame.toJSON().id)
+            res.send(newVideogame.toJSON().id);
         });
     } catch (error) {
         next(error);

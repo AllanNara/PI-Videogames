@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { useHistory } from "react-router-dom";
-import { postNewGame, getAllGenres, getAllPlatforms } from "../redux/action";
+import { useHistory } from "react-router-dom";
+import { postNewGame, getAllGenres, getAllPlatforms, getCreatedGames, getVideogames } from "../redux/action";
 
 export default function CreationForm() {
     const dispatch = useDispatch();
-    // const history = useHistory();
+    const history = useHistory();
     // const createdGame = useSelector(state => state.createdGames)
     const genresList = useSelector(state => state.allGenres);
     const platformsList = useSelector(state => state.allPlatforms);
@@ -21,23 +21,21 @@ export default function CreationForm() {
         released: new Date().toISOString().split('T')[0]
     });
     const nameGames = games.map(elem => elem.name)
-    console.log(nameGames)
-    
-    // function details() {
-    //     if(createdGame.length) {
-    //         setTimeout(() => {history.push(`/home/videogame/${createdGame[createdGame.length - 1].id}`)}, 3000)
-    //     }
-    // }
-    // function details(useSelector) {
-    //         const createdGameUpload = useSelector(state => state.createdGames);
-    //         setTimeout(() => {history.push(`/home/videogame/${createdGameUpload[createdGameUpload.length - 1].id}`)}, 1500)
-    // }
+    // console.log(genresList)
+    // console.log(platformsList)
+    console.log(games)
 
     useEffect(() => {
+        // console.log('UseEffect')
         dispatch(getAllGenres());
         dispatch(getAllPlatforms());
+        dispatch(getVideogames())
+        // dispatch(getCreatedGames());
     }, [dispatch]);
-    
+
+
+    // console.log(createdGame)
+
     const handleChange = (e) => {
         if(typeof newGame[e.target.name] === 'object') {
             if(e.target.value !== 'DEFAULT' && !newGame[e.target.name].includes(e.target.value)) {
@@ -82,10 +80,11 @@ export default function CreationForm() {
                 platforms: [],
                 genres: [],
                 image: '',
-                released: ''
+                released: new Date().toISOString().split('T')[0]
             });
             alert('Juego creado con exito!!');
-            // details(useSelector)
+            return history.push(`/home/create/redirecting`)
+
         };
     };
 
@@ -122,7 +121,9 @@ export default function CreationForm() {
         }
         if(!newGame.description) {
             errors.description = 'Description is required'
-        };
+        }else if(newGame.description.length < 50) {
+            errors.description = 'La descripcion no debe contener menos de 50 caracteres'
+        }
         if(!/^[0-9]+(\.[0-9]{0,2})?$/.test(newGame.rating)) {
             errors.rating = 'Rating debe contener solo numeros'
         }else if(newGame.rating > 5 || newGame.rating < 0) {
