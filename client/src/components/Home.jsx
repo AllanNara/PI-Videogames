@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getVideogames, stateError, isLoading, getAllGenres } from "../redux/action";
 import { useDispatch, useSelector } from 'react-redux'
 import Card from "./Card";
+import Pagination from "./Pagination";
 
 export default function Main() {
     const games = useSelector(state => state.allVideogames);
@@ -13,6 +14,10 @@ export default function Main() {
         sort: 'rating',
         isData: 'all',
         genresInclude: []
+    });
+    const [pagination, setPagination] = useState({
+        current: 1,
+        total: 15
     });
 
     useEffect(() => {
@@ -26,23 +31,16 @@ export default function Main() {
     const dataBase = games.find(g => g.isDataBase === true)
     
     let existInDB = 1
-    const gamesByGenres = []
+    const render = []
     games.forEach(game => {
         if(sortByGenre(game.genres, filter.genresInclude)) {
-            gamesByGenres.push(game)
+            render.push(game)
         }
-        existInDB = gamesByGenres.find(exist => exist.isDataBase)
-    })
+        existInDB = render.find(exist => exist.isDataBase)
+    });
 
-    // if(filter.genresInclude.length && filter.isData === '1') {
-    //     existInDB = gamesByGenres.find(exist => exist.isDataBase)
-
-    // }
-
-    // if(!existInDB) {
-    //     alert('no existe')
-    // } 
-
+    const maxPages = render.length / pagination.total
+    console.log(maxPages)
 
     function sortByGenre(object, includes) {
         for (let i = 0; i < includes.length; i++) {
@@ -149,7 +147,7 @@ export default function Main() {
 
     const keyForChild = generatorKey();
 
-    if(existInDB === undefined && filter.isData === '1' || !gamesByGenres.length && filter.genresInclude.length) {
+    if(existInDB === undefined && filter.isData === '1' || !render.length && filter.genresInclude.length) {
         var notFound = <h2>No se encontraron resultados para tu busqueda</h2>
     }
         
@@ -159,7 +157,7 @@ export default function Main() {
 
 
     // const render = filterState.length ? filterState : games
-    const render = gamesByGenres
+    // const render = gamesByGenres
 
     return (
         <>
@@ -233,7 +231,7 @@ export default function Main() {
             filter.isData === '1' && !dataBase ?
                 <h3>No se encontraron juegos agregados...</h3>
             :
-            gamesByGenres.map(game => {
+            render.map(game => {
                 if(game.isDataBase === !!parseInt(filter.isData)) {
                     return <Card 
                         name={game.name} 
@@ -245,7 +243,7 @@ export default function Main() {
                 };
             })
             :
-            gamesByGenres.map(game => 
+            render.map(game => 
                 <Card 
                     name={game.name} 
                     genres={game.genres} 
@@ -255,6 +253,7 @@ export default function Main() {
                 />
             )}
             { notFound? notFound : null }
+            <Pagination/>
         </>
     )
 }
