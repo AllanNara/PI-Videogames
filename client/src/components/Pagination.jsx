@@ -1,9 +1,10 @@
 import React from "react";
 
-export default function Pagination() {
+export default function Pagination({pagCurrent, setPagination, max}) {
     return (
         <>
-        <h1>Esta deberia ser la paginacion</h1>
+        <button>Anterior</button>
+        <button>Siguiente</button>
         </>
     )
 }
