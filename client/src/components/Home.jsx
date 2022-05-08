@@ -1,27 +1,45 @@
-import React, { useEffect, useRef, useState } from "react";
-import { getVideogames, stateError, isLoading } from "../redux/action";
+import React, { useEffect, useState } from "react";
+import { getVideogames, stateError, isLoading, getAllGenres } from "../redux/action";
 import { useDispatch, useSelector } from 'react-redux'
 import Card from "./Card";
-import { SearchBar } from './SearchBar';
 
 export default function Main() {
     const games = useSelector(state => state.allVideogames);
     const loading = useSelector(state => state.stateLoading);
+    const generes = useSelector(state => state.allGenres);
     const error = useSelector(state => state.errorExist);
     const dispatch = useDispatch();
     const [filter, setFilter] = useState({
         sort: 'rating',
         isData: 'all',
-        genre: ''
+        genresInclude: []
     });
 
     useEffect(() => {
         dispatch(getVideogames())
+        dispatch(getAllGenres())
         return () => {
             dispatch(stateError(false))
         }
     }, [dispatch]);
     
+    const dataBase = games.find(g => g.isDataBase === true)
+
+    let gamesByGenres = []
+    games.forEach(game => {
+        if(sortByGenre(game.genres, filter.genresInclude)) {
+            gamesByGenres.push(game)
+        }
+    }) 
+
+
+    function sortByGenre(object, includes) {
+        for (let i = 0; i < includes.length; i++) {
+            if(!object.includes(includes[i])) return false     
+        }
+        return true
+    };
+
     function changeSort(data) {
         switch(data) {
             case 'A-Z':
@@ -84,19 +102,59 @@ export default function Main() {
         changeSort(e.target.value)
     };
     
-    const resetValues = (e) => {
+    const resetValues = () => {
         if(
             filter.sort !== 'rating' ||
             filter.isData !== 'all' ||
-            filter.genre !== ''
+            filter.genresInclude.length
         ) return window.location.reload()
     };
     
+    const handleChange = (e) => {
+        if(e.target.value !== 'DEFAULT' && !filter[e.target.name].includes(e.target.value)) {
+            setFilter({
+                ...filter,
+                [e.target.name]: [...filter[e.target.name], e.target.value]
+            });
+            e.target.value = 'DEFAULT';
+        };
+    };
+
+    const removeItem = (e) => {
+        e.preventDefault()
+        setFilter({
+            ...filter,
+            [e.target.name]: filter[e.target.name].filter(item => item !== e.target.value)
+        })
+    };
+
+    function* generatorKey() {
+        let number = 100000;
+        while(true) {
+            number++;
+            yield number
+        }
+    };
+
+    const keyForChild = generatorKey();
+        
+    if(!gamesByGenres.length && filter.genresInclude.length) {
+        setFilter({
+            ...filter,
+            genresInclude: []
+        });
+        console.log('error: filtros no aplicables')
+    }
+
+
+    // const render = filterState.length ? filterState : games
+    const render = gamesByGenres.length ? gamesByGenres : games
+
     return (
         <>
         <div>
-         <h1>HOME</h1>
-        <label>Filtrar por origen:</label>
+            <h1>HOME</h1>
+            <label>Filtrar por origen:</label>
                 <select 
                     name="isData"
                     onChange={filterOrigin} 
@@ -107,7 +165,7 @@ export default function Main() {
                     <option value='1'>Creados</option>
                     <option value='0'>Ya existentes</option>
                 </select> {" "}
-        <label>Ordenar segun:</label>
+            <label>Ordenar segun:</label>
                 <select 
                     name="sort"
                     onChange={sortResults} 
@@ -118,17 +176,53 @@ export default function Main() {
                     <option value='A-Z'>A-Z</option>
                     <option value='Z-A'>Z-A</option>
                 </select>
-        <button onClick={resetValues}>Resetear valores</button>
+                <div>
+                    <form>
+                        <label>Buscar por generos</label>
+                        <select 
+                                name="genresInclude" 
+                                onChange={handleChange} 
+                                defaultValue={'DEFAULT'}
+                                disabled={loading? true : false}
+                            >
+                        <option value="DEFAULT" disabled>Seleccionar</option>
+                            {generes.length ? generes.map(gnr =>{
+                                    return <option key={gnr.id}>{gnr.name}</option>
+                            }) : null}
+                        </select>
+                        {/* ACA SE MUESTRAN LOS RESULTADOS EN GENEROS */}
+                        <div>
+                            {filter.genresInclude.length ? 
+                            filter.genresInclude.map(gnr =>
+                            <span key={keyForChild.next().value}>
+                            <button value={gnr} name='genresInclude' onClick={removeItem}>
+                                <span style={{color: 'blue'}}>X</span> {gnr}
+                            </button>
+                            </span>)
+                            : null}
+                        </div>     
+                        {/* <input type="submit" value="Buscar" /> */}
+                    </form>               
+                </div>
+            <button onClick={resetValues}>Resetear valores</button>
+
+
+
+            {/* ENTRA A RENDERIZAR LOS COMPONENTES SEGUN LOS RESULTADOS */}
         </div>
-         {loading ? <span>Loading...</span> : 
-            error ? 
+        {
+        loading ?
+            <span>Loading...</span> 
+        : error ? 
             <div>
                 <h1>Hmm... Hubo un error al cargar el contenidos</h1>
                 <h3>Pruebe refrescando la pagina en unos minutos</h3>
             </div>
-            : typeof filter.isData !== 'all' ?
-            games.length ? 
-            games.map(game => {
+        : filter.isData !== 'all' ?
+            filter.isData === '1' && !dataBase ?
+                <h3>No se encontraron juegos agregados...</h3>
+            :
+            render.map(game => {
                 if(game.isDataBase === !!parseInt(filter.isData)) {
                     return <Card 
                         name={game.name} 
@@ -139,8 +233,8 @@ export default function Main() {
                     />
                 };
             })
-            : <h1>Aun no existen juegos creados... </h1> :
-            games.map(game => 
+            :
+            render.map(game => 
                 <Card 
                     name={game.name} 
                     genres={game.genres} 
@@ -148,9 +242,7 @@ export default function Main() {
                     id={game.id}
                     key={game.id}
                 />
-            )
-         }
-
+            )}
         </>
     )
 }
