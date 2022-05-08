@@ -24,13 +24,24 @@ export default function Main() {
     }, [dispatch]);
     
     const dataBase = games.find(g => g.isDataBase === true)
-
-    let gamesByGenres = []
+    
+    let existInDB = 1
+    const gamesByGenres = []
     games.forEach(game => {
         if(sortByGenre(game.genres, filter.genresInclude)) {
             gamesByGenres.push(game)
         }
-    }) 
+        existInDB = gamesByGenres.find(exist => exist.isDataBase)
+    })
+
+    // if(filter.genresInclude.length && filter.isData === '1') {
+    //     existInDB = gamesByGenres.find(exist => exist.isDataBase)
+
+    // }
+
+    // if(!existInDB) {
+    //     alert('no existe')
+    // } 
 
 
     function sortByGenre(object, includes) {
@@ -85,8 +96,8 @@ export default function Main() {
 
     const filterOrigin = (e) => {
         e.preventDefault();
-        console.log(e.target.value)
-        console.log(e.target.name)
+        // console.log(e.target.value)
+        // console.log(e.target.name)
         if(e.target.value !== filter.isData) {
             dispatch(isLoading(true));
             setFilter({
@@ -137,18 +148,18 @@ export default function Main() {
     };
 
     const keyForChild = generatorKey();
-        
-    if(!gamesByGenres.length && filter.genresInclude.length) {
-        setFilter({
-            ...filter,
-            genresInclude: []
-        });
-        console.log('error: filtros no aplicables')
+
+    if(existInDB === undefined && filter.isData === '1' || !gamesByGenres.length && filter.genresInclude.length) {
+        var notFound = <h2>No se encontraron resultados para tu busqueda</h2>
     }
+        
+    // if(!gamesByGenres.length && filter.genresInclude.length) {
+    //     var notFound = <h2></>
+    // }
 
 
     // const render = filterState.length ? filterState : games
-    const render = gamesByGenres.length ? gamesByGenres : games
+    const render = gamesByGenres
 
     return (
         <>
@@ -222,7 +233,7 @@ export default function Main() {
             filter.isData === '1' && !dataBase ?
                 <h3>No se encontraron juegos agregados...</h3>
             :
-            render.map(game => {
+            gamesByGenres.map(game => {
                 if(game.isDataBase === !!parseInt(filter.isData)) {
                     return <Card 
                         name={game.name} 
@@ -234,7 +245,7 @@ export default function Main() {
                 };
             })
             :
-            render.map(game => 
+            gamesByGenres.map(game => 
                 <Card 
                     name={game.name} 
                     genres={game.genres} 
@@ -243,6 +254,7 @@ export default function Main() {
                     key={game.id}
                 />
             )}
+            { notFound? notFound : null }
         </>
     )
 }
