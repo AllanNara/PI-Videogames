@@ -9,7 +9,8 @@ import {
     GET_ALL_GENRES,
     GET_ALL_PLATFORMS,
     ERROR_EXISTS,
-    GET_CREATED_GAMES
+    GET_CREATED_GAMES,
+    CURRENT_PAGE
 } from "../action-types";
 
 export function getVideogames() {
@@ -116,3 +117,10 @@ export function clearState() {
         type: CLEAR_STATE
     }
 };
+
+export function currentPage(payload) {
+    return {
+        type: CURRENT_PAGE,
+        payload
+    }
+}

@@ -5,19 +5,17 @@ import Card from "./Card";
 import Pagination from "./Pagination";
 
 export default function Main() {
+    const dispatch = useDispatch();
     const games = useSelector(state => state.allVideogames);
     const loading = useSelector(state => state.stateLoading);
     const generes = useSelector(state => state.allGenres);
     const error = useSelector(state => state.errorExist);
-    const dispatch = useDispatch();
+    const pagination = useSelector(state => state.pagination);
+    const gamesPerPag = useSelector(state => state.gamesPerPag);
     const [filter, setFilter] = useState({
         sort: 'rating',
         isData: 'all',
         genresInclude: []
-    });
-    const [pagination, setPagination] = useState({
-        current: 1,
-        total: 15
     });
 
     useEffect(() => {
@@ -29,8 +27,7 @@ export default function Main() {
     }, [dispatch]);
     
     const dataBase = games.find(g => g.isDataBase === true);
-    const prueba = games.filter(g => g.isDataBase === true);
-    console.log(prueba)    
+
     let existInDB = 1;
     const render = [];
     games.forEach(game => {
@@ -39,8 +36,6 @@ export default function Main() {
         }
         existInDB = render.find(exist => exist.isDataBase)
     });
-
-    const maxPages = Math.ceil(render.length / pagination.total);
 
     function sortByGenre(object, includes) {
         for (let i = 0; i < includes.length; i++) {
@@ -147,7 +142,7 @@ export default function Main() {
 
     if(existInDB === undefined && filter.isData === '1' || !render.length && filter.genresInclude.length) {
         var notFound = <h2>No se encontraron resultados para tu busqueda</h2>
-    }
+    };
 
     return (
         <>
@@ -222,26 +217,29 @@ export default function Main() {
                 <h3>No se encontraron juegos agregados...</h3>
             :
             render
-            .slice(
-                (pagination.current - 1) * pagination.total,
-                (pagination.current - 1) * pagination.total + pagination.total
-            ).map(game => {
+            .filter(game => {
                 if(game.isDataBase === !!parseInt(filter.isData)) {
                     console.log(game)
-                    return <Card 
+                    return game
+                };
+            }).slice(
+                (pagination - 1) * gamesPerPag,
+                (pagination - 1) * gamesPerPag + gamesPerPag
+            )
+            .map(game => 
+                    <Card 
                         name={game.name} 
                         genres={game.genres} 
                         img={game.image} 
                         id={game.id}
                         key={game.id}
                     />
-                };
-            })
+                )
             :
             render
             .slice(
-                (pagination.current - 1) * pagination.total,
-                (pagination.current - 1) * pagination.total + pagination.total
+                (pagination - 1) * gamesPerPag,
+                (pagination - 1) * gamesPerPag + gamesPerPag
             ).map(game => 
                 <Card 
                     name={game.name} 
@@ -252,7 +250,7 @@ export default function Main() {
                 />
             )}
             { notFound? notFound : null }
-            <Pagination pagCurrent={pagination.current} setPagination={setPagination} max={maxPages}/>
+            {!loading ? <Pagination amount={render.length}/> : null}
         </>
     )
 }

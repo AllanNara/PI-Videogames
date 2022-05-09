@@ -8,7 +8,7 @@ export function Redirecting() {
     
     const redirection = games[games.length - 1]
     if(redirection !== undefined) {
-        setTimeout(() => {history.push(`/home/videogame/${redirection}`)}, 1700)
+        setTimeout(() => {history.push(`/home/videogame/${redirection}`)}, 1100)
     }
 
     return (

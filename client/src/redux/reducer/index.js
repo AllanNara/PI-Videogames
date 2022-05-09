@@ -8,7 +8,8 @@ import {
     GET_ALL_GENRES,
     GET_ALL_PLATFORMS,
     ERROR_EXISTS,
-    GET_CREATED_GAMES
+    GET_CREATED_GAMES,
+    CURRENT_PAGE
 } from "../action-types";
 
 const initialState = {
@@ -18,6 +19,8 @@ const initialState = {
     allGenres: [],
     allPlatforms: [],
     createdGames: [],
+    pagination: 1,
+    gamesPerPag: 15,
     errorExist: false,
     stateLoading: undefined
 }
@@ -75,6 +78,11 @@ export default function rootReducer(state = initialState, { type, payload }) {
                 gameDetail: {},
                 gamesByName: []
             };
+        case CURRENT_PAGE:
+            return {
+                ...state,
+                pagination: payload
+            }
         default: return state
     }   
 }   
