@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { currentPage } from "../redux/action";
 
@@ -9,10 +9,8 @@ export default function Pagination({amount}) {
     const maxPages = Math.ceil(amount / gamesPerPag);
 
     const nextPage = (e) => {
-
         if(pagination + 1 > maxPages) return 
         dispatch(currentPage(pagination + 1));
-        // button.style.visibility = "hidden";
     };
 
     const prevPage = (e) => {

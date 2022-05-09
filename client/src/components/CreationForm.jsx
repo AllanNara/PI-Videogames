@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { postNewGame, getAllGenres, getAllPlatforms, getCreatedGames, getVideogames } from "../redux/action";
+import { postNewGame, getAllGenres, getAllPlatforms, getVideogames } from "../redux/action";
 
 export default function CreationForm() {
     const dispatch = useDispatch();
     const history = useHistory();
-    // const createdGame = useSelector(state => state.createdGames)
     const genresList = useSelector(state => state.allGenres);
     const platformsList = useSelector(state => state.allPlatforms);
     const games = useSelector(state => state.allVideogames);
@@ -22,21 +21,13 @@ export default function CreationForm() {
     });
     
     const nameGames = games.map(elem => elem.name)
-    // console.log(genresList)
-    // console.log(platformsList)
-    // console.log(games)
 
     useEffect(() => {
-        console.log('UseEffect')
         dispatch(getAllGenres());
         dispatch(getAllPlatforms());
-        // dispatch(getCreatedGames());
         dispatch(getVideogames())
     }, [dispatch]);
 
-
-    // console.log('Juegos Creados : ',createdGame)
-    // console.log('Todos loa juegos : ',games)
 
     const handleChange = (e) => {
         if(typeof newGame[e.target.name] === 'object') {

@@ -29,12 +29,12 @@ export default function Main() {
     const dataBase = games.find(g => g.isDataBase === true);
 
     let existInDB = 1;
-    const render = [];
+    const preRender = [];
     games.forEach(game => {
         if(sortByGenre(game.genres, filter.genresInclude)) {
-            render.push(game)
+            preRender.push(game)
         }
-        existInDB = render.find(exist => exist.isDataBase)
+        existInDB = preRender.find(exist => exist.isDataBase)
     });
 
     function sortByGenre(object, includes) {
@@ -60,7 +60,9 @@ export default function Main() {
                     if(!isNaN(Number(nameA[0])) && !isNaN(Number(nameB[0]))) return nameA - nameB
                     return 0
                 });
+                dispatch(isLoading(true));
                 setFilter({...filter, sort: 'A-Z'});
+                setTimeout(() => {dispatch(isLoading(false))}, 600);
                 break;
             case 'Z-A':
                 games.sort((a, b) => {
@@ -76,14 +78,19 @@ export default function Main() {
                     if(!isNaN(Number(nameA[0])) && !isNaN(Number(nameB[0]))) return nameB - nameA
                     return 0
                 });
+                dispatch(isLoading(true));
                 setFilter({...filter, sort: 'Z-A'});
+                setTimeout(() => {dispatch(isLoading(false))}, 600);
                 break;
             case 'rating':
                 games.sort((a, b) => {
                     return b.rating - a.rating
                 });
+                dispatch(isLoading(true));
                 setFilter({...filter, sort: 'rating'});
+                setTimeout(() => {dispatch(isLoading(false))}, 600);
                 break;
+            default: break
         };
     };
 
@@ -95,7 +102,7 @@ export default function Main() {
                 ...filter,
                 isData: e.target.value
             });
-            setTimeout(() => {dispatch(isLoading(false))}, 1000);
+            setTimeout(() => {dispatch(isLoading(false))}, 600);
         };
     };
         
@@ -140,9 +147,13 @@ export default function Main() {
 
     const keyForChild = generatorKey();
 
-    if(existInDB === undefined && filter.isData === '1' || !render.length && filter.genresInclude.length) {
+    if((existInDB === undefined && filter.isData === '1') || (!preRender.length && filter.genresInclude.length)) {
         var notFound = <h2>No se encontraron resultados para tu busqueda</h2>
     };
+
+    const render = filter.isData !== 'all'? preRender.filter(game =>
+        game.isDataBase === !!parseInt(filter.isData)
+    ) : preRender
 
     return (
         <>
@@ -195,15 +206,14 @@ export default function Main() {
                             </span>)
                             : null}
                         </div>     
-                        {/* <input type="submit" value="Buscar" /> */}
                     </form>               
                 </div>
             <button onClick={resetValues}>Resetear valores</button>
+        </div>
 
 
 
             {/* ENTRA A RENDERIZAR LOS COMPONENTES SEGUN LOS RESULTADOS */}
-        </div>
         {
         loading ?
             <span>Loading...</span> 
@@ -212,35 +222,15 @@ export default function Main() {
                 <h1>Hmm... Hubo un error al cargar el contenidos</h1>
                 <h3>Pruebe refrescando la pagina en unos minutos</h3>
             </div>
-        : filter.isData !== 'all' ?
-            filter.isData === '1' && !dataBase ?
+        : filter.isData === '1' && !dataBase ?
                 <h3>No se encontraron juegos agregados...</h3>
-            :
-            render
-            .filter(game => {
-                if(game.isDataBase === !!parseInt(filter.isData)) {
-                    console.log(game)
-                    return game
-                };
-            }).slice(
-                (pagination - 1) * gamesPerPag,
-                (pagination - 1) * gamesPerPag + gamesPerPag
-            )
-            .map(game => 
-                    <Card 
-                        name={game.name} 
-                        genres={game.genres} 
-                        img={game.image} 
-                        id={game.id}
-                        key={game.id}
-                    />
-                )
-            :
-            render
-            .slice(
-                (pagination - 1) * gamesPerPag,
-                (pagination - 1) * gamesPerPag + gamesPerPag
-            ).map(game => 
+        :
+        render
+        .slice(
+            (pagination - 1) * gamesPerPag,
+            (pagination - 1) * gamesPerPag + gamesPerPag
+        )
+        .map(game => 
                 <Card 
                     name={game.name} 
                     genres={game.genres} 
@@ -248,7 +238,8 @@ export default function Main() {
                     id={game.id}
                     key={game.id}
                 />
-            )}
+            )
+        }
             { notFound? notFound : null }
             {!loading ? <Pagination amount={render.length}/> : null}
         </>

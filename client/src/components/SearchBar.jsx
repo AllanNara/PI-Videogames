@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getVideogames } from '../redux/action';
 
 export function SearchBar() {
     const dispatch = useDispatch()
     const [search, setSearch] = useState('');
-    const gamesName = useSelector(state => state.gamesByName)
-
 
     const handleSubmit = (e) => {
         e.preventDefault()

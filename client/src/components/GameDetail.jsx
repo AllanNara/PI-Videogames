@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getGameDetail, clearState, stateError } from "../redux/action";
@@ -8,9 +8,7 @@ export default function GameDetail() {
     const loading = useSelector(state => state.stateLoading);
     const error = useSelector(state => state.errorExist)
     const dispatch = useDispatch();
-    const { id } = useParams()
-
-    // console.log(detail)
+    const { id } = useParams();
 
     useEffect(() => {
         dispatch(getGameDetail(id));
@@ -19,7 +17,6 @@ export default function GameDetail() {
             dispatch(stateError(false))            
         }
     },[id, dispatch])
-
 
 
     return ( 
@@ -47,8 +44,6 @@ export default function GameDetail() {
                      <li>Released: {detail.released}</li>
                      <li>
                          Genres:
-                         {/* {console.log(detail.genres[0].name)}
-                         {console.log(detail.genres[0].id)} */}
                         <ul>
                             {detail.genres ?
                              detail.genres.length ?
@@ -65,7 +60,6 @@ export default function GameDetail() {
                              : <li>Cargando generos...</li>}
                         </ul>
                      </li>
-                     
                  </ul>
              </div>
          </div>
