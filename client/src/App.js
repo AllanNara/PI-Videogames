@@ -2,16 +2,16 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Landing from './components/Landing';
 import Home from './components/Home';
-// import About from './components/About';
 import CreationForm from './components/CreationForm';
 import GameDetail from './components/GameDetail'
 import NavBar from './components/NavBar';
 import { SearchByName } from './components/SearchByName';
 import { Redirecting } from './components/Redirecting';
+import './App.css'
 
 export default function App() {
   return (
-    <React.Fragment>
+    <div className="App">
       <Route path={'/home'} component={NavBar} />
       <Switch>
         {/* <Route path={'/home/about'} component={About} /> */}
@@ -22,6 +22,6 @@ export default function App() {
         <Route path={'/home'} component={Home}/>
         <Route path={'/'} component={Landing} />
       </Switch>
-    </React.Fragment>
+    </div>
   );
 }

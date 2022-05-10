@@ -1,0 +1,37 @@
+.landing-image {
+    background-image: url("../img/ultrawide.jpg");
+    background-color: #cccccc;
+    height: 40rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.landing-text {
+    padding: 10px 0px 15px 60px;
+    text-align: left;
+    position: absolute;
+    top: 78%;
+    left: 26.5%;
+    width: 600px;
+    transform: translate(-50%, -50%);
+    background-color: #cccccc32;
+    -webkit-text-stroke: 0.8px black;
+    border: 1px wheat solid;
+    border-radius: 70px;
+}
+
+.landing-text h2 {
+    display: inline;
+}
+
+.landing-button {
+    width: 85px;
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 20px;
+    border-radius: 30px;
+    background-color: black;
+    color: #cccccc;
+}

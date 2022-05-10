@@ -1,0 +1,23 @@
+.card {
+  margin: 20px 0px;
+  width: 30vw;
+  height: 370px;
+  overflow: hidden;
+  border: outset var(--p3) 1px;
+  border-radius: 40px;
+  background-color: black;
+}
+
+.link:hover, .link:focus, .link:active {
+    text-decoration: none;
+    color: var(--p3);
+    border: outset transparent 10px;
+    border-radius: 40px;
+}
+
+.image-card {
+  height: 250px;
+  width: 100%;
+  border-bottom: solid black 1px;
+}
+

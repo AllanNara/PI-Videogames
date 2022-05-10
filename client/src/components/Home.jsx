@@ -3,6 +3,8 @@ import { getVideogames, stateError, isLoading, getAllGenres } from "../redux/act
 import { useDispatch, useSelector } from 'react-redux'
 import Card from "./Card";
 import Pagination from "./Pagination";
+import Load from "./Load";
+import './Home.css';
 
 export default function Main() {
     const dispatch = useDispatch();
@@ -25,8 +27,6 @@ export default function Main() {
             dispatch(stateError(false))
         }
     }, [dispatch]);
-    
-    const dataBase = games.find(g => g.isDataBase === true);
 
     let existInDB = 1;
     const preRender = [];
@@ -147,7 +147,8 @@ export default function Main() {
 
     const keyForChild = generatorKey();
 
-    if((existInDB === undefined && filter.isData === '1') || (!preRender.length && filter.genresInclude.length)) {
+    if((existInDB === undefined && filter.isData === '1') ||
+     (!preRender.length && filter.genresInclude.length)) {
         var notFound = <h2>No se encontraron resultados para tu busqueda</h2>
     };
 
@@ -157,8 +158,7 @@ export default function Main() {
 
     return (
         <>
-        <div>
-            <h1>HOME</h1>
+        <div className="home-bar-filter">
             <label>Filtrar por origen:</label>
                 <select 
                     name="isData"
@@ -181,8 +181,6 @@ export default function Main() {
                     <option value='A-Z'>A-Z</option>
                     <option value='Z-A'>Z-A</option>
                 </select>
-                <div>
-                    <form>
                         <label>Buscar por generos</label>
                         <select 
                                 name="genresInclude" 
@@ -206,8 +204,6 @@ export default function Main() {
                             </span>)
                             : null}
                         </div>     
-                    </form>               
-                </div>
             <button onClick={resetValues}>Resetear valores</button>
         </div>
 
@@ -216,29 +212,29 @@ export default function Main() {
             {/* ENTRA A RENDERIZAR LOS COMPONENTES SEGUN LOS RESULTADOS */}
         {
         loading ?
-            <span>Loading...</span> 
+            <Load/>
         : error ? 
             <div>
                 <h1>Hmm... Hubo un error al cargar el contenidos</h1>
                 <h3>Pruebe refrescando la pagina en unos minutos</h3>
             </div>
-        : filter.isData === '1' && !dataBase ?
-                <h3>No se encontraron juegos agregados...</h3>
         :
-        render
-        .slice(
-            (pagination - 1) * gamesPerPag,
-            (pagination - 1) * gamesPerPag + gamesPerPag
-        )
-        .map(game => 
-                <Card 
-                    name={game.name} 
-                    genres={game.genres} 
-                    img={game.image} 
-                    id={game.id}
-                    key={game.id}
-                />
+        <div className='cards'>
+{            render
+            .slice(
+                (pagination - 1) * gamesPerPag,
+                (pagination - 1) * gamesPerPag + gamesPerPag
             )
+            .map(game => 
+                    <Card 
+                        name={game.name} 
+                        genres={game.genres} 
+                        img={game.image} 
+                        id={game.id}
+                        key={game.id}
+                    />
+                )}
+        </div>
         }
             { notFound? notFound : null }
             {!loading ? <Pagination amount={render.length}/> : null}

@@ -1,0 +1,29 @@
+.circle {
+    border-radius: 9999px;
+    width: 5.5rem;
+    height: 5.5rem;
+}
+
+.circle {
+    margin: 70px auto 50px;
+    /* margin: 4rem auto; */
+    position: relative;
+    border-top: 0.8rem solid rgba(0, 0, 0, 0.2);
+    border-right: 0.8rem solid rgba(0, 0, 0, 0.2);
+    border-bottom: 0.8rem solid rgba(0, 0, 0, 0.2);
+    border-left: 0.8rem solid #333;
+    animation: rotateCircleLoader 1.1s infinite linear;
+}
+
+@keyframes rotateCircleLoader {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.text-load {
+    color: #333;
+}

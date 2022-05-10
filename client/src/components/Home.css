@@ -1,0 +1,16 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.home-bar-filter {
+  background-color: var(--p3);
+  padding: 15px 0;
+  margin: 15px 0;
+  border: outset 7px #6d23b6;
+}
+
+.div-genres{
+  display: inline;
+}
