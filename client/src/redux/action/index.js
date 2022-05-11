@@ -87,7 +87,7 @@ export function postNewGame(form) {
             .then(response => {dispatch({
                 type: POST_NEW_GAME,
                 payload: response.data
-            });console.log(response.data)})
+            })})
     }
 };
 
