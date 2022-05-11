@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getVideogames } from '../redux/action';
 import './SearchBar.css'
 
 export function SearchBar() {
-    const dispatch = useDispatch()
     const [search, setSearch] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        dispatch(getVideogames(search));
         setSearch('')
     };
 
