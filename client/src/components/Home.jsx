@@ -48,8 +48,8 @@ export default function Main() {
         switch(data) {
             case 'A-Z':
                 games.sort((a, b) => {
-                    let nameA = a.name.toLowerCase().trim();
-                    let nameB = b.name.toLowerCase().trim();
+                    let nameA = a.name.toLowerCase();
+                    let nameB = b.name.toLowerCase();
                     if(isNaN(Number(nameA[0])) && isNaN(Number(nameB[0]))) {
                         if(nameA > nameB) return 1
                         if(nameA < nameB) return -1
@@ -66,8 +66,8 @@ export default function Main() {
                 break;
             case 'Z-A':
                 games.sort((a, b) => {
-                    let nameA = a.name.toLowerCase().trim();
-                    let nameB = b.name.toLowerCase().trim();
+                    let nameA = a.name.toLowerCase();
+                    let nameB = b.name.toLowerCase();
                     if(isNaN(Number(nameA[0])) && isNaN(Number(nameB[0]))) {
                         if(nameA < nameB) return 1
                         if(nameA > nameB) return -1
