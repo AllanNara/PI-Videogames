@@ -8,14 +8,23 @@ export default function Pagination({amount}) {
     const gamesPerPag = useSelector(state => state.gamesPerPag);
     const maxPages = Math.ceil(amount / gamesPerPag);
 
+    const scrollToTop = () =>{
+        window.scrollTo({
+          top: 0, 
+          behavior: 'smooth'
+        });
+      };
+    
     const nextPage = (e) => {
         if(pagination + 1 > maxPages) return 
         dispatch(currentPage(pagination + 1));
+        scrollToTop()
     };
 
     const prevPage = (e) => {
         if(pagination - 1 < 1) return
         dispatch(currentPage(pagination - 1));
+        scrollToTop()
     };
 
     const hidePrev = pagination === 1 ? {visibility: 'hidden'} : null
@@ -23,9 +32,9 @@ export default function Pagination({amount}) {
 
     return (
         <div>
-        <button style={hidePrev} onClick={prevPage}>Anterior</button>
-        <button style={hideNext} onClick={nextPage}>Siguiente</button>
-        <span>{" "}{pagination} de {maxPages}{" "}</span>
+            <button style={hidePrev} onClick={prevPage}>Anterior</button>
+            <button style={hideNext} onClick={nextPage}>Siguiente</button>
+            <span>{" "}{pagination} de {maxPages}{" "}</span>
         </div>
     )
 }

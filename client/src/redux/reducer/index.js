@@ -8,7 +8,6 @@ import {
     GET_ALL_GENRES,
     GET_ALL_PLATFORMS,
     ERROR_EXISTS,
-    GET_CREATED_GAMES,
     CURRENT_PAGE
 } from "../action-types";
 
@@ -52,11 +51,6 @@ export default function rootReducer(state = initialState, { type, payload }) {
                 ...state,
                 allPlatforms: payload
             };
-        case GET_CREATED_GAMES:
-            return {
-                ...state,
-                createdGames: state.allVideogames.filter(game => {return game.isDataBase ? game : null})
-            }
         case POST_NEW_GAME:
             return {
                 ...state,

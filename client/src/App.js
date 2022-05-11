@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import { SearchByName } from './components/SearchByName';
 import { Redirecting } from './components/Redirecting';
 import './App.css'
+import Footer from './components/Footer';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path={'/home'} component={Home}/>
         <Route path={'/'} component={Landing} />
       </Switch>
+      <Route path={'/home'} component={Footer}/>
     </div>
   );
 }

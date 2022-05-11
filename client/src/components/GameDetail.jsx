@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getGameDetail, clearState, stateError } from "../redux/action";
+import Load from "./Load";
+import './GameDetail.css'
 
 export default function GameDetail() {
     const detail = useSelector(state => state.gameDetail)
@@ -21,7 +23,7 @@ export default function GameDetail() {
 
     return ( 
         <>
-        {loading ? <span>Loading...</span> : 
+        {loading ? <Load /> : 
          error ? 
          <div>
              <h1>Error 404: Invalid parameter</h1>
@@ -31,38 +33,50 @@ export default function GameDetail() {
             </Link>
          </div>
             :
-         <div>
-             <div>
-                <h1>{detail.name}</h1>
-                <img src={detail.image} alt="game" style={{height:'200px'}} />
-             </div>
-             <div>
-                 <h3>Description:</h3>
-                <p>{detail.description}</p>
-                 <ul>
-                     <li>Rating: {detail.rating}</li>
-                     <li>Released: {detail.released}</li>
-                     <li>
-                         Genres:
-                        <ul>
-                            {detail.genres ?
-                             detail.genres.length ?
-                             detail.genres.map(elem => <li key={elem.id}>{elem.name}</li>) : <li>No existen generos asociados</li>
-                             : <li>Cargando generos...</li>}
-                        </ul>
-                     </li>
-                     <li>
-                         Platforms:
-                        <ul>
-                            {detail.platforms ?
-                             detail.platforms.length ?
-                             detail.platforms.map(elem => <li key={elem.id}>{elem.name}</li>) : <li>No existen plataformas asociadas</li>
-                             : <li>Cargando generos...</li>}
-                        </ul>
-                     </li>
-                 </ul>
-             </div>
-         </div>
+        <div className="contain-detail">
+                <img className='image-detail' src={detail.image} alt="game"/>
+            <div className="contents">
+                {/* <h3>Description:</h3> */}
+                <div className="name-description">
+                    <h1>{detail.name}</h1>
+                    <p>{detail.description}</p>
+                </div>
+                <div className="details">
+                        <div className="details-one">
+                            <div>
+                                <h4>Rating:</h4>
+                                <p>{detail.rating}</p>
+                            </div>
+                            <div>
+                                <h4>Platforms:</h4>
+                                <ul>
+                                    {detail.platforms ?
+                                    detail.platforms.length ?
+                                    detail.platforms.map(elem => <li key={elem.id}>{elem.name}</li>) : <li>No existen plataformas asociadas</li>
+                                    : <li>Cargando plataformas...</li>}
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div className="details-one">
+                            <div>
+                                <h4>Released:</h4>
+                                <p>{detail.released}</p>
+                            </div>
+                            <div>
+                                <h4>Genres:</h4>
+                                <ul>
+                                    {detail.genres ?
+                                    detail.genres.length ?
+                                    detail.genres.map(elem => <li key={elem.id}>{elem.name}</li>) : <li>No existen generos asociados</li>
+                                    : <li>Cargando generos...</li>}
+                                </ul>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
         }
         </>
     )

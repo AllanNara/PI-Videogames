@@ -5,9 +5,6 @@ const router = Router();
 const { API_KEY } = process.env;
 const { Videogame, Genre, Platform } = require('../db')  
 
-// Obtener el detalle de un videojuego en particular
-// Debe traer solo los datos pedidos en la ruta de detalle de videojuego
-// Incluir los géneros asociados
 router.get('/:idVideogame', async (req, res, next) => {
     const { idVideogame } = req.params;
     
@@ -25,11 +22,7 @@ router.get('/:idVideogame', async (req, res, next) => {
         };
         
         if(!findById) return res.status(404).json({ERROR: 'Game not found'});
-        // if(!Object.keys(findById).length) return res.status(404).json({ERROR: 'Game not found'});
-        console.log(findById.platforms[0])
-        // console.log(findById.platform)
         const data = {};
-        // let genresArray = findById.genres.map(genere => genere.name);
         let platformsArray = findById.platforms.map(pl => pl.platform);
         data.name = findById.name;
         data.image = isFromDB ? findById.image : findById.background_image;
@@ -38,7 +31,6 @@ router.get('/:idVideogame', async (req, res, next) => {
         data.released = findById.released;
         data.rating = findById.rating;
         data.platforms = isFromDB ? findById.platforms : platformsArray
-        // console.log(data)
         res.json(data)
     } catch (error) {
         next(error)
@@ -65,7 +57,6 @@ router.post('/', async (req, res, next) => {
         await Promise.all(platformsGame).then(e => {
             let data = e.map(dts => dts.toJSON());
             data.forEach(async e => await newVideogame.addPlatform(e.id));
-            // console.log(newVideogame.toJSON().id)
             res.send(newVideogame.toJSON().id);
         });
     } catch (error) {

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { postNewGame, getAllGenres, getAllPlatforms, getVideogames } from "../redux/action";
+import './CreationForm.css'
+import img from '../img/videogame.png'
 
 export default function CreationForm() {
     const dispatch = useDispatch();
@@ -138,7 +140,12 @@ export default function CreationForm() {
     
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div className="container">
+        <form 
+        onSubmit={handleSubmit}
+        className='form-box'
+        >
+            <h1>Agrega un nuevo juego!</h1>
             <div>
                 <label>*Name:</label>
                 <input 
@@ -211,7 +218,7 @@ export default function CreationForm() {
                   {errors.platforms}
                 </p> 
                 {/* ACA SE MUESTRAN LOS RESULTADOS EN PLATAFORMAS */}
-                <div>
+                <div className="genres-items">
                     {newGame.platforms.length ? 
                     newGame.platforms.map(plt => {
                     return <div key={keyForChild.next().value}>
@@ -235,7 +242,7 @@ export default function CreationForm() {
                     }) : null}
                     </select>
                 {/* ACA SE MUESTRAN LOS RESULTADOS EN GENEROS */}
-                <div>
+                <div className="genres-items">
                     {newGame.genres.length ? 
                     newGame.genres.map(gnr =>
                     <div key={keyForChild.next().value}>
@@ -264,5 +271,9 @@ export default function CreationForm() {
 
             <input type="submit" value="Send new Game"/>
         </form>
+        <div className="image-div">
+            <img className="image" src={img} alt='asdf'/>
+        </div>        
+        </div>
     )
 }

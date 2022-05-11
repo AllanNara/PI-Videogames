@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Load from "./Load";
 
 export function Redirecting() {
     const games = useSelector(state => state.createdGames)
@@ -15,6 +16,7 @@ export function Redirecting() {
         <div>
             <h1>Juego creado con exito!!</h1>
             <h3>Espere unos segundos hasta ser redireccionado a los detalles del juego...</h3>
+            <Load/>
         </div>
     )
 }

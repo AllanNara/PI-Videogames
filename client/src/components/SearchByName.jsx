@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { clearState, getGamesName, stateError } from "../redux/action";
 import Card from "./Card";
+import Load from "./Load";
 
 export function SearchByName() {
     const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export function SearchByName() {
 
     return (
         <>
-         {loading ? <span>Loading...</span> :
+         {loading ? <Load /> :
             error ? 
             <div>
                 <h1>Resultados de busqueda para "{name}"...</h1>
@@ -41,7 +42,7 @@ export function SearchByName() {
                 </div>
             </div> :
             <div>
-                <h1>Resultados de busqueda para "{name}"...</h1>
+                <h1 style={{margin: '50px 0'}}>Resultados de busqueda para "{name}"...</h1>
                 {games.map(game => 
                     <Card 
                         name={game.name} 

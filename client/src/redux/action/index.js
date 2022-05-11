@@ -9,7 +9,6 @@ import {
     GET_ALL_GENRES,
     GET_ALL_PLATFORMS,
     ERROR_EXISTS,
-    GET_CREATED_GAMES,
     CURRENT_PAGE
 } from "../action-types";
 
@@ -61,12 +60,6 @@ export function getGameDetail(id) {
             
     };
 };
-
-export function getCreatedGames() {
-    return {
-        type: GET_CREATED_GAMES
-    }
-}
 
 export function getAllGenres() {
     return (dispatch) => {

@@ -1,8 +1,6 @@
 //PLATFORMS.JS
 const { Router } = require('express');
 const router = Router();
-// const { API_KEY } = process.env;
-// const axios = require('axios');
 const { Platform } = require('../db')  
 
 router.get('/', async (req, res, next) => {

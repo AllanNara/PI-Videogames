@@ -1,7 +1,8 @@
 .landing-image {
     background-image: url("../img/ultrawide.jpg");
     background-color: #cccccc;
-    height: 40rem;
+    height: 100vh;
+    width: 100vw;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

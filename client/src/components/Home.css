@@ -2,15 +2,45 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  margin: 40px 0;
 }
 
 .home-bar-filter {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   background-color: var(--p3);
   padding: 15px 0;
   margin: 15px 0;
   border: outset 7px #6d23b6;
+  height: 55px;
 }
 
-.div-genres{
-  display: inline;
+.home-bar-filter div {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-bar-filter .genres-items {
+  height: 100%;
+  width: 30%;
+  padding: auto 70px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.reset-button {
+  height: 30px;
+  /* text-align: center; */
+  font-size: 13px;
+  padding: 0px 15px;
+  border-radius: 9999px;
+  color: var(--p2);
+  background-color: var(--p1);
+  transition: all 0.2s;
+}
+
+.reset-button:hover {
+  background-color: red;
 }

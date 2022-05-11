@@ -1,0 +1,14 @@
+.foot {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--p3);
+    padding: 15px 0;
+    margin-top: 50px;
+    border: outset 7px #6d23b6;
+    height: 50px;
+    background-image: url('../img/2kiss.png');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}

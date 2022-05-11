@@ -110,14 +110,11 @@ export default function Main() {
         e.preventDefault();
         changeSort(e.target.value)
     };
-    
-    const resetValues = () => {
-        if(
-            filter.sort !== 'rating' ||
-            filter.isData !== 'all' ||
-            filter.genresInclude.length
-        ) return window.location.reload()
-    };
+
+    const button_reset =
+    filter.sort !== 'rating' ||
+    filter.isData !== 'all' ||
+    filter.genresInclude.length ? true : false
     
     const handleChange = (e) => {
         if(e.target.value !== 'DEFAULT' && !filter[e.target.name].includes(e.target.value)) {
@@ -159,7 +156,9 @@ export default function Main() {
     return (
         <>
         <div className="home-bar-filter">
-            <label>Filtrar por origen:</label>
+
+            <div>
+                <label>Filtrar por origen:</label>
                 <select 
                     name="isData"
                     onChange={filterOrigin} 
@@ -170,7 +169,10 @@ export default function Main() {
                     <option value='1'>Creados</option>
                     <option value='0'>Ya existentes</option>
                 </select> {" "}
-            <label>Ordenar segun:</label>
+            </div>
+
+            <div>
+                <label>Ordenar segun:</label>
                 <select 
                     name="sort"
                     onChange={sortResults} 
@@ -181,30 +183,41 @@ export default function Main() {
                     <option value='A-Z'>A-Z</option>
                     <option value='Z-A'>Z-A</option>
                 </select>
-                        <label>Buscar por generos</label>
-                        <select 
-                                name="genresInclude" 
-                                onChange={handleChange} 
-                                defaultValue={'DEFAULT'}
-                                disabled={loading? true : false}
-                            >
-                        <option value="DEFAULT" disabled>Seleccionar</option>
-                            {generes.length ? generes.map(gnr =>{
-                                    return <option key={gnr.id}>{gnr.name}</option>
-                            }) : null}
-                        </select>
-                        {/* ACA SE MUESTRAN LOS RESULTADOS EN GENEROS */}
-                        <div>
-                            {filter.genresInclude.length ? 
-                            filter.genresInclude.map(gnr =>
-                            <span key={keyForChild.next().value}>
-                            <button value={gnr} name='genresInclude' onClick={removeItem}>
-                                <span style={{color: 'blue'}}>X</span> {gnr}
-                            </button>
-                            </span>)
-                            : null}
-                        </div>     
-            <button onClick={resetValues}>Resetear valores</button>
+            </div>
+
+            <div>
+                <label>Buscar por generos</label>
+                <select 
+                        name="genresInclude" 
+                        onChange={handleChange} 
+                        defaultValue={'DEFAULT'}
+                        disabled={loading? true : false}
+                    >
+                    <option value="DEFAULT" disabled>Seleccionar</option>
+                    {generes.length ? generes.map(gnr =>{
+                        return <option key={gnr.id}>{gnr.name}</option>
+                    }) : null}
+                </select>
+            </div>
+                {/* ACA SE MUESTRAN LOS RESULTADOS EN GENEROS */}
+            <div className="genres-items">
+                {filter.genresInclude.length ? 
+                filter.genresInclude.map(gnr =>
+                <span key={keyForChild.next().value}>
+                <button value={gnr} name='genresInclude' onClick={removeItem}>
+                    <span style={{color: 'blue'}}>X</span> {gnr}
+                </button>
+                </span>)
+                : null}
+            </div>
+            <div>
+                {
+                button_reset ? 
+                <button className="reset-button" onClick={() => window.location.reload()}>
+                    Limpiar
+                </button> : null
+                } 
+            </div>
         </div>
 
 
@@ -236,8 +249,8 @@ export default function Main() {
                 )}
         </div>
         }
-            { notFound? notFound : null }
-            {!loading ? <Pagination amount={render.length}/> : null}
+        {!loading ? notFound ? notFound : <Pagination amount={render.length}/> : null}
+        {/* <footer> X </footer> */}
         </>
     )
 }

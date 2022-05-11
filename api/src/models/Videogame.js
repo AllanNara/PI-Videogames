@@ -45,9 +45,8 @@ module.exports = (sequelize) => {
     image: {
       type: DataTypes.TEXT
     }
-    //  POR LA CANTIDAD DE PLATAFORMAS VOY A COPIARLAS DE LA API
     // platforms: {
-    //   type: DataTypes.ARRAY(DataTypes.TEXT),
+    //   type: DataTypes.ARRAY(...),
     //   allowNull: false,
     // }
   },
@@ -56,10 +55,3 @@ module.exports = (sequelize) => {
   }
   );
 };
-
-// ID: * No puede ser un ID de un videojuego ya existente en la API rawg
-// Nombre *
-// Descripción *
-// Fecha de lanzamiento
-// Rating
-// Plataformas *
