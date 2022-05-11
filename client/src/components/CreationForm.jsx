@@ -272,7 +272,7 @@ export default function CreationForm() {
             <input type="submit" value="Send new Game"/>
         </form>
         <div className="image-div">
-            <img className="image" src={img} alt='asdf'/>
+            <img className="image" src={img} alt='videogame'/>
         </div>        
         </div>
     )
