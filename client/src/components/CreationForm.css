@@ -30,3 +30,17 @@
     margin-top: 80px;
     margin-left: 50px;
 }
+
+p.danger {
+    margin: 5px auto;
+    width: 20vw;
+    border-radius: 7px;
+    border: solid red 1px;
+    background-color: white;
+    color: red;
+    font-size: 15px;
+}
+  
+input.danger {
+border: 2px solid red;
+}

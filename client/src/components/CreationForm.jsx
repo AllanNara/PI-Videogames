@@ -155,9 +155,8 @@ export default function CreationForm() {
                 onChange={handleChange}
                 className={errors.name && 'danger'}
                 />
-                <p className={'danger'}>
-                  {errors.name}
-                </p>
+                {errors.name ? <p className={'danger'}>{errors.name}</p> : null}
+
             </div>
             <div>
                 <label>Image:</label>
@@ -169,10 +168,9 @@ export default function CreationForm() {
                     placeholder='URL de la Imagen'
                     className={errors.image && 'danger'}
                 />
-                <p className={'danger'}>
-                  {errors.image}
-                </p>
+                {errors.image ? <p className={'danger'}>{errors.image}</p> : null}
             </div>
+
             <div>
                 <label>*Description:</label>
                 <textarea
@@ -180,11 +178,10 @@ export default function CreationForm() {
                     value={newGame.description}
                     onChange={handleChange} 
                     className={errors.description && 'danger'}
-                />
-                <p className={'danger'}>
-                  {errors.description}
-                </p>            
+                />  
+                {errors.description ? <p className={'danger'}>{errors.description}</p> : null} 
             </div>
+
             <div>
                 <label>Rating:</label>
                 <input 
@@ -197,10 +194,9 @@ export default function CreationForm() {
                     min="0" 
                     max="5"
                 />
-                <p className={'danger'}>
-                  {errors.rating}
-                </p> 
+                {errors.rating ? <p className={'danger'}>{errors.rating}</p> : null}      
             </div>
+            
             <div>
                 <label>*Platforms:</label>
                 <select 
@@ -214,21 +210,20 @@ export default function CreationForm() {
                         return <option key={plat.id}>{plat.name}</option>
                     }) : null}
                 </select>
-                <p className={'danger'}>
-                  {errors.platforms}
-                </p> 
+                {errors.platforms ? <p className={'danger'}>{errors.platforms}</p> : null}      
                 {/* ACA SE MUESTRAN LOS RESULTADOS EN PLATAFORMAS */}
                 <div className="genres-items">
                     {newGame.platforms.length ? 
                     newGame.platforms.map(plt => {
-                    return <div key={keyForChild.next().value}>
-                    <button value={plt} name='platforms' onClick={removeItem}>
-                        <span style={{color: 'blue'}}>X</span> {plt}
-                    </button>
+                        return <div key={keyForChild.next().value}>
+                        <button value={plt} name='platforms' onClick={removeItem}>
+                            <span style={{color: 'blue'}}>X</span> {plt}
+                        </button>
                     </div>})
                     : null}
                 </div>
             </div>
+
             <div>
                 <label>Genres:</label>
                 <select 
@@ -236,9 +231,9 @@ export default function CreationForm() {
                         onChange={handleChange} 
                         defaultValue={'DEFAULT'}
                     >
-                <option value="DEFAULT" disabled>Select...</option>
+                    <option value="DEFAULT" disabled>Select...</option>
                     {genresList.length ? genresList.map(gnr =>{
-                            return <option key={gnr.id}>{gnr.name}</option>
+                        return <option key={gnr.id}>{gnr.name}</option>
                     }) : null}
                     </select>
                 {/* ACA SE MUESTRAN LOS RESULTADOS EN GENEROS */}
@@ -253,6 +248,7 @@ export default function CreationForm() {
                     : null}
                 </div>
             </div>
+            
             <div>
                 <label>Released:</label>
                 <input 
@@ -264,9 +260,7 @@ export default function CreationForm() {
                         min="1958-10-17"
                         max={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
                     />
-                    <p className={'danger'}>
-                      {errors.released}
-                    </p>
+                {errors.released ? <p className={'danger'}>{errors.released}</p> : null}      
             </div>
 
             <input type="submit" value="Send new Game"/>

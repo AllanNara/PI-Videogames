@@ -7,31 +7,29 @@
 }
 
 .input {
-    /* background-color: transparent; */
-    /* color: #FFF; */
     outline: none;
-    height: 35px;
+    height: 42px;
     font-size: 15px;
     border: 0;
     border-radius: 10px;
-    width: 100%;
+    width: 150%;
 }
 
 .button-input {
     position: absolute;
-    right: 0px;
-    top: 2px;
+    right: -60px;
+    top: 3px;
     background-color: var(--p3);
     border-radius: 10px;
+    font-size: 15px;
     border: 0;
     color: #FFF;
     width: 65px;
-    height: 37px;
+    height: 42.9px;
     outline: 0;
 }
 
 .button-input:hover {
     border: solid 10px transparent;
     background-color: blueviolet;
-    /* font-size: medium; */
 }

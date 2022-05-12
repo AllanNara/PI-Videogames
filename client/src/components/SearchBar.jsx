@@ -5,18 +5,12 @@ import './SearchBar.css'
 export function SearchBar() {
     const [search, setSearch] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        setSearch('')
-    };
-
     const handleChange = (e) => {
         setSearch(e.target.value);
     }
 
     return (
         <form 
-        onSubmit={handleSubmit}
         className='form'
         >
             <div className='search'>

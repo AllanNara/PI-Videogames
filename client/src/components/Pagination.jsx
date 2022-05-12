@@ -15,20 +15,21 @@ export default function Pagination({amount}) {
         });
       };
     
-    const nextPage = (e) => {
+    const nextPage = () => {
+        scrollToTop()
         if(pagination + 1 > maxPages) return 
         dispatch(currentPage(pagination + 1));
-        scrollToTop()
     };
 
-    const prevPage = (e) => {
+    const prevPage = () => {
+        scrollToTop()
         if(pagination - 1 < 1) return
         dispatch(currentPage(pagination - 1));
-        scrollToTop()
     };
 
     const hidePrev = pagination === 1 ? {visibility: 'hidden'} : null
     const hideNext = pagination === maxPages ? {visibility: 'hidden'} : null
+
 
     return (
         <div>

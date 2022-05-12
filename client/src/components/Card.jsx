@@ -8,8 +8,8 @@ export default function Card({name, genres, img, id}) {
         <Link className='link' to={`/home/videogame/${id}`}>
             <div className="card">
                 <img className="image-card" src={img} alt="videogame"/>
-                <div className="content-card">
-                    <h2 className="card-title">{name}</h2>
+                <div>
+                    <h2>{name}</h2>
                     <p>{genres.join(', ')}</p>
                 </div>
             </div>

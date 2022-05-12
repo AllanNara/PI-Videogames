@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getVideogames, stateError, isLoading, getAllGenres } from "../redux/action";
+import { getVideogames, stateError, isLoading, getAllGenres, currentPage } from "../redux/action";
 import { useDispatch, useSelector } from 'react-redux'
 import Card from "./Card";
 import Pagination from "./Pagination";
@@ -104,11 +104,13 @@ export default function Main() {
             });
             setTimeout(() => {dispatch(isLoading(false))}, 600);
         };
+        resetPages();
     };
         
     const sortResults = (e) => {
         e.preventDefault();
-        changeSort(e.target.value)
+        changeSort(e.target.value);
+        resetPages();
     };
 
     const button_reset =
@@ -118,20 +120,25 @@ export default function Main() {
     
     const handleChange = (e) => {
         if(e.target.value !== 'DEFAULT' && !filter[e.target.name].includes(e.target.value)) {
+            dispatch(isLoading(true));
             setFilter({
                 ...filter,
                 [e.target.name]: [...filter[e.target.name], e.target.value]
             });
             e.target.value = 'DEFAULT';
+            setTimeout(() => {dispatch(isLoading(false))}, 600);
+            resetPages();
         };
     };
 
     const removeItem = (e) => {
-        e.preventDefault()
+        dispatch(isLoading(true));
         setFilter({
             ...filter,
             [e.target.name]: filter[e.target.name].filter(item => item !== e.target.value)
-        })
+        });
+        setTimeout(() => {dispatch(isLoading(false))}, 600);
+        resetPages();
     };
 
     function* generatorKey() {
@@ -141,6 +148,10 @@ export default function Main() {
             yield number
         }
     };
+
+    function resetPages() {
+        dispatch(currentPage(1))
+    }
 
     const keyForChild = generatorKey();
 
@@ -233,24 +244,23 @@ export default function Main() {
             </div>
         :
         <div className='cards'>
-{            render
-            .slice(
-                (pagination - 1) * gamesPerPag,
-                (pagination - 1) * gamesPerPag + gamesPerPag
-            )
-            .map(game => 
-                    <Card 
-                        name={game.name} 
-                        genres={game.genres} 
-                        img={game.image} 
-                        id={game.id}
-                        key={game.id}
-                    />
-                )}
+        {render
+        .slice(
+            (pagination - 1) * gamesPerPag,
+            (pagination - 1) * gamesPerPag + gamesPerPag
+        )
+        .map(game => 
+                <Card 
+                    name={game.name} 
+                    genres={game.genres} 
+                    img={game.image} 
+                    id={game.id}
+                    key={game.id}
+                />
+            )}
         </div>
         }
         {!loading ? notFound ? notFound : <Pagination amount={render.length}/> : null}
-        {/* <footer> X </footer> */}
         </>
     )
 }
