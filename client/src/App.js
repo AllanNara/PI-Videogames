@@ -7,8 +7,8 @@ import GameDetail from './components/GameDetail'
 import NavBar from './components/NavBar';
 import { SearchByName } from './components/SearchByName';
 import { Redirecting } from './components/Redirecting';
-import './App.css'
 import Footer from './components/Footer';
+import './App.css'
 
 export default function App() {
   return (
