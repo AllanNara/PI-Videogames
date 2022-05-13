@@ -37,15 +37,33 @@ export default function CreationForm() {
         fn.removeItem(e, newGame, setNewGame)
     };
 
-    const submit = (e) => {
-        fn.submitForm(e, postNewGame, newGame, errors, setNewGame, history, dispatch)
+    const submitForm = (e) => {
+        e.preventDefault();
+        if(!newGame.name || !newGame.description || !newGame.platforms.length){
+            return alert('Faltan datos obligatorios')
+        } else if(Object.keys(errors).length) {
+            return alert('Verificar si los datos son validos')
+        } else {
+            dispatch(postNewGame(newGame));
+            setNewGame({
+                name: '',
+                description: '',
+                rating: 0,
+                platforms: [],
+                genres: [],
+                image: '',
+                released: new Date().toISOString().split('T')[0]
+            });
+            alert('Juego creado con exito!!');
+            return history.push(`/home/create/redirecting`)
+        };
     };
     
 
     return (
         <div className="container">
         <form 
-        onSubmit={submit}
+        onSubmit={submitForm}
         className='form-box'
         >
             <h1>Agrega un nuevo juego!</h1>

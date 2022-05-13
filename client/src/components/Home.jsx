@@ -23,10 +23,10 @@ export default function Main() {
     });
 
     useEffect(() => {
-        dispatch(getVideogames())
-        dispatch(getAllGenres())
+        dispatch(getVideogames());
+        dispatch(getAllGenres());
         return () => {
-            dispatch(stateError(false))
+            dispatch(stateError(false));
         }
     }, [dispatch]);
 
@@ -45,8 +45,8 @@ export default function Main() {
 
     const render = filter.isData !== 'all'? preRender.filter(game =>
         game.isDataBase === !!parseInt(filter.isData)
-    ) : preRender
-
+    ) : preRender;
+;
     return (
         <>
         <HomeBarFilter filter={filter} setFilter={setFilter} genres={genres} />
