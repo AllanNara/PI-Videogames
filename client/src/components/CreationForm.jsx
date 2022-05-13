@@ -38,7 +38,7 @@ export default function CreationForm() {
     };
 
     const submit = (e) => {
-        fn.handleSubmit(e, postNewGame, newGame, errors, setNewGame, history, dispatch)
+        fn.submitForm(e, postNewGame, newGame, errors, setNewGame, history, dispatch)
     };
     
 

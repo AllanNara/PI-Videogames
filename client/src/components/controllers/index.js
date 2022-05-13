@@ -6,9 +6,67 @@ function* generatorKey() {
     }
 };
 
-const keyForChild = generatorKey();
+function handleChange(e, state, seting, setErrors, nameGames) {
+    if(typeof state[e.target.name] === 'object') {
+        if(e.target.value !== 'DEFAULT' && !state[e.target.name].includes(e.target.value)) {
+            seting({
+                ...state,
+                [e.target.name]: [...state[e.target.name], e.target.value]
+            });
+            e.target.value = 'DEFAULT';
+            // seting(gameCreate);
+            if(setErrors) {
+                setErrors(validation({
+                    ...state,
+                    [e.target.name]: [...state[e.target.name], e.target.value]
+                }, nameGames));
+            }
+        };
+    } else {
+        seting({
+            ...state,
+            [e.target.name]: e.target.value
+        });
+        // seting(gameCreate);
+        if(setErrors) {
+            setErrors(validation({
+                ...state,
+                [e.target.name]: e.target.value
+            }, nameGames));
+        } 
+    };
+};
 
-    // CONTROL DE FORMULARIO
+function removeItem(e, state, seting) {
+    seting({
+        ...state,
+        [e.target.name]: state[e.target.name].filter(item => item !== e.target.value)
+    });
+};
+
+function submitForm(e, postNewGame, newGame, errors, setNewGame, history, dispatch) {
+    e.preventDefault();
+    if(!newGame.name || !newGame.description || !newGame.platforms.length){
+        return alert('Faltan datos obligatorios')
+    } else if(Object.keys(errors).length) {
+        return alert('Verificar si los datos son validos')
+    } else {
+        dispatch(postNewGame(newGame));
+        setNewGame({
+            name: '',
+            description: '',
+            rating: 0,
+            platforms: [],
+            genres: [],
+            image: '',
+            released: new Date().toISOString().split('T')[0]
+        });
+        alert('Juego creado con exito!!');
+        return history.push(`/home/create/redirecting`)
+
+    };
+};
+
 function validation(newGame, nameGames) {
     let errors = {};
 
@@ -55,67 +113,6 @@ function validation(newGame, nameGames) {
         };
     };
     return errors
-};
-
-function handleChange(e, state, seting, setErrors, nameGames) {
-    if(typeof state[e.target.name] === 'object') {
-        if(e.target.value !== 'DEFAULT' && !state[e.target.name].includes(e.target.value)) {
-            seting({
-                ...state,
-                [e.target.name]: [...state[e.target.name], e.target.value]
-            });
-            e.target.value = 'DEFAULT';
-            // seting(gameCreate);
-            if(setErrors) {
-                setErrors(validation({
-                    ...state,
-                    [e.target.name]: [...state[e.target.name], e.target.value]
-                }, nameGames));
-            }
-        };
-    } else {
-        seting({
-            ...state,
-            [e.target.name]: e.target.value
-        });
-        // seting(gameCreate);
-        if(setErrors) {
-            setErrors(validation({
-                ...state,
-                [e.target.name]: e.target.value
-            }, nameGames));
-        } 
-    };
-};
-
-function removeItem(e, state, seting) {
-    seting({
-        ...state,
-        [e.target.name]: state[e.target.name].filter(item => item !== e.target.value)
-    });
-};
-
-function handleSubmit(e, postNewGame, newGame, errors, setNewGame, history, dispatch) {
-    e.preventDefault();
-    if(!newGame.name || !newGame.description || !newGame.platforms.length){
-        return alert('Faltan datos obligatorios')
-    } else if(Object.keys(errors).length) {
-        return alert('Verificar si los datos son validos')
-    } else {
-        dispatch(postNewGame(newGame));
-        setNewGame({
-            name: '',
-            description: '',
-            rating: 0,
-            platforms: [],
-            genres: [],
-            image: '',
-            released: new Date().toISOString().split('T')[0]
-        });
-        alert('Juego creado con exito!!');
-        return history.push(`/home/create/redirecting`)
-
-    };
 };
 
 function changeSort(e, games) {
@@ -166,15 +163,14 @@ function sortByGenre(gameGenres, selectGenres) {
     return true
 };
 
+const keyForChild = generatorKey();
+
 module.exports = {
     keyForChild,
-    //FORM
     validation,
-    handleSubmit,
-    //HOME
+    submitForm,
     changeSort,
     sortByGenre,
-    //ALL
     removeItem,
     handleChange
-}
+};
