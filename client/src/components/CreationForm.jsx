@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { postNewGame, getAllGenres, getVideogames } from "../redux/action";
-import './styles/CreationForm.css'
-import img from './img/videogame.png'
+import img from './img/videogame.png';
+import './styles/CreationForm.css';
+import * as fn from './controllers'
 
 export default function CreationForm() {
     const dispatch = useDispatch();
@@ -22,126 +23,28 @@ export default function CreationForm() {
         released: new Date().toISOString().split('T')[0]
     });
 
-    const nameGames = games.map(elem => elem.name)
-
     useEffect(() => {
         dispatch(getAllGenres());
         dispatch(getVideogames())
     }, [dispatch]);
 
-
-    const handleChange = (e) => {
-        if(typeof newGame[e.target.name] === 'object') {
-            if(e.target.value !== 'DEFAULT' && !newGame[e.target.name].includes(e.target.value)) {
-                const gameCreate = {
-                    ...newGame,
-                    [e.target.name]: [...newGame[e.target.name], e.target.value]
-                };
-                setNewGame(gameCreate);
-                setErrors(controllers(gameCreate));
-            };
-            e.target.value = 'DEFAULT'
-        } else {
-            const gameCreate = {
-                ...newGame,
-                [e.target.name]: e.target.value
-            };
-            setNewGame(gameCreate);
-            setErrors(controllers(gameCreate));
-        }
+    const change = (e) => {
+        fn.handleChange(e, games, newGame, setNewGame, setErrors)
     };
     
-    const removeItem = (e) => {
-        e.preventDefault()
-        setNewGame({
-            ...newGame,
-            [e.target.name]: newGame[e.target.name].filter(item => item !== e.target.value)
-        })
+    const remove = (e) => {
+        fn.removeItem(e, setNewGame, newGame)
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if(!newGame.name || !newGame.description || !newGame.platforms.length){
-            return alert('Faltan datos obligatorios')
-        } else if(Object.keys(errors).length) {
-            return alert('Verificar si los datos son validos')
-        } else {
-            dispatch(postNewGame(newGame));
-            setNewGame({
-                name: '',
-                description: '',
-                rating: 0,
-                platforms: [],
-                genres: [],
-                image: '',
-                released: new Date().toISOString().split('T')[0]
-            });
-            alert('Juego creado con exito!!');
-            return history.push(`/home/create/redirecting`)
-
-        };
+    const submit = (e) => {
+        fn.handleSubmit(e, postNewGame, newGame, errors, setNewGame, history, dispatch)
     };
-
-    function* generatorKey() {
-        let number = 100000;
-        while(true) {
-            number++;
-            yield number
-        }
-    };
-
-    const keyForChild = generatorKey();
-
-    // CONTROL DE FORMULARIO
-    function controllers(newGame) {
-        let errors = {};
-
-        const image = newGame.image ?
-        newGame.image.split('.')[newGame.image.split('.').length - 1]
-        : null;
-        
-        if(!newGame.platforms.length) {
-            errors.platforms = 'Platform is required'
-        } else if(newGame.platforms.includes('Select...') || newGame.genres.includes('Select...')) {
-            alert('FATAL ERROR');
-            return window.location.reload()
-        };
-        if(!newGame.name) {
-            errors.name = 'Name is required'
-        } else if(newGame.name > 40) {
-            errors.name = 'Name must have only 40 characters'
-        } else if(nameGames.includes(newGame.name)) {
-            errors.name = 'El nombre ya existe! Por favor elija otro'
-        }
-        if(!newGame.description) {
-            errors.description = 'Description is required'
-        }else if(newGame.description.length < 50) {
-            errors.description = 'La descripcion no debe contener menos de 50 caracteres'
-        }
-        if(!/^[0-9]+(\.[0-9]{0,2})?$/.test(newGame.rating)) {
-            errors.rating = 'Rating debe contener solo numeros'
-        }else if(newGame.rating > 5 || newGame.rating < 0) {
-            errors.rating = 'Rating debe ser un numero entre 0 y 5'
-        };
-        if(newGame.released > new Date().toISOString().split('T')[0]) {
-            errors.released = 'Released debe ser una fecha anterior a la seleccionada'
-        } else if(newGame.released < "1958-10-17") {
-            errors.released = 'Released debe ser una fecha posterior a la seleccionada'
-        };
-        if(image) {
-            if(image.toLowerCase() !== 'jpg' && image.toLowerCase() !== 'png') {
-                 errors.image = 'Image solo acepta URL con formatos .JPG / .PNG'
-             };
-        };
-
-        return errors
-    }
     
 
     return (
         <div className="container">
         <form 
-        onSubmit={handleSubmit}
+        onSubmit={submit}
         className='form-box'
         >
             <h1>Agrega un nuevo juego!</h1>
@@ -151,7 +54,7 @@ export default function CreationForm() {
                     type="text" 
                     name="name"
                     value={newGame.name}
-                onChange={handleChange}
+                onChange={change}
                 className={errors.name && 'danger'}
                 />
                 {errors.name ? <p className={'danger'}>{errors.name}</p> : null}
@@ -163,7 +66,7 @@ export default function CreationForm() {
                     type="url" 
                     name="image"
                     value={newGame.image}
-                    onChange={handleChange} 
+                    onChange={change} 
                     placeholder='URL de la Imagen'
                     className={errors.image && 'danger'}
                 />
@@ -175,7 +78,7 @@ export default function CreationForm() {
                 <textarea
                     name="description"
                     value={newGame.description}
-                    onChange={handleChange} 
+                    onChange={change} 
                     className={errors.description && 'danger'}
                 />  
                 {errors.description ? <p className={'danger'}>{errors.description}</p> : null} 
@@ -188,7 +91,7 @@ export default function CreationForm() {
                     step=".01" 
                     name="rating"
                     value={newGame.rating}
-                    onChange={handleChange}
+                    onChange={change}
                     className={errors.rating && 'danger'}
                     min="0" 
                     max="5"
@@ -200,13 +103,13 @@ export default function CreationForm() {
                 <label>*Platforms:</label>
                 <select 
                     name="platforms"
-                    onChange={handleChange} 
+                    onChange={change} 
                     defaultValue={'DEFAULT'}
                     className={errors.platforms && 'danger'}
                     >
                     <option value="DEFAULT" disabled>Select...</option>
                     {platformsList.length ? platformsList.map(plat =>{
-                        return <option key={keyForChild.next().value}>{plat}</option>
+                        return <option key={fn.keyForChild.next().value}>{plat}</option>
                     }) : null}
                 </select>
                 {errors.platforms ? <p className={'danger'}>{errors.platforms}</p> : null}      
@@ -214,8 +117,8 @@ export default function CreationForm() {
                 <div className="genres-items">
                     {newGame.platforms.length ? 
                     newGame.platforms.map(plt => {
-                        return <div key={keyForChild.next().value}>
-                        <button value={plt} name='platforms' onClick={removeItem}>
+                        return <div key={fn.keyForChild.next().value}>
+                        <button value={plt} name='platforms' onClick={remove}>
                             <span style={{color: 'blue'}}>X</span> {plt}
                         </button>
                     </div>})
@@ -227,7 +130,7 @@ export default function CreationForm() {
                 <label>Genres:</label>
                 <select 
                         name="genres" 
-                        onChange={handleChange} 
+                        onChange={change} 
                         defaultValue={'DEFAULT'}
                     >
                     <option value="DEFAULT" disabled>Select...</option>
@@ -239,8 +142,8 @@ export default function CreationForm() {
                 <div className="genres-items">
                     {newGame.genres.length ? 
                     newGame.genres.map(gnr =>
-                    <div key={keyForChild.next().value}>
-                    <button value={gnr} name='genres' onClick={removeItem}>
+                    <div key={fn.keyForChild.next().value}>
+                    <button value={gnr} name='genres' onClick={remove}>
                         <span style={{color: 'blue'}}>X</span> {gnr}
                     </button>
                     </div>)
@@ -254,7 +157,7 @@ export default function CreationForm() {
                         type="date" 
                         name="released"
                         value={newGame.released}
-                        onChange={handleChange}
+                        onChange={change}
                         className={errors.released && 'danger'}
                         min="1958-10-17"
                         max={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}

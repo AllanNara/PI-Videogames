@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getGameDetail, clearState, stateError } from "../redux/action";
 import Load from "./Load";
+import * as fn from './controllers'
 import './styles/GameDetail.css'
 
 export default function GameDetail() {
@@ -19,15 +20,6 @@ export default function GameDetail() {
             dispatch(stateError(false))            
         }
     },[id, dispatch])
-
-    function* generatorKey() {
-        let number = 100000;
-        while(true) {
-            number++;
-            yield number
-        }
-    };
-    const keyForChild = generatorKey();
 
     return ( 
         <>
@@ -60,7 +52,7 @@ export default function GameDetail() {
                                 <ul>
                                     {detail.platforms ?
                                     detail.platforms.length ?
-                                    detail.platforms.map(plat => <li key={keyForChild.next().value}>{plat.name ? plat.name : plat}</li>) : <li>No existen plataformas asociadas</li>
+                                    detail.platforms.map(plat => <li key={fn.keyForChild.next().value}>{plat.name ? plat.name : plat}</li>) : <li>No existen plataformas asociadas</li>
                                     : <li>Cargando plataformas...</li>}
                                 </ul>
                             </div>
