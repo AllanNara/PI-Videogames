@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import './NavBar.css'
 import { SearchBar } from './SearchBar';
+import './styles/NavBar.css'
 
 export default function NavBar() {
     return (

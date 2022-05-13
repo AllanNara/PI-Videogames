@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { postNewGame, getAllGenres, getVideogames } from "../redux/action";
-import './CreationForm.css'
-import img from '../img/videogame.png'
+import './styles/CreationForm.css'
+import img from './img/videogame.png'
 
 export default function CreationForm() {
     const dispatch = useDispatch();
@@ -26,7 +26,6 @@ export default function CreationForm() {
 
     useEffect(() => {
         dispatch(getAllGenres());
-        // dispatch(getAllPlatforms());
         dispatch(getVideogames())
     }, [dispatch]);
 

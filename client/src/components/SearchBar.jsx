@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-import './SearchBar.css'
+import './styles/SearchBar.css'
 
 export function SearchBar() {
     const [search, setSearch] = useState('');

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Card from "./Card";
 import Pagination from "./Pagination";
 import Load from "./Load";
-import './Home.css';
+import './styles/Home.css';
 
 export default function Main() {
     const dispatch = useDispatch();
