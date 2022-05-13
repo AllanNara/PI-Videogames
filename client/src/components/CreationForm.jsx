@@ -29,11 +29,12 @@ export default function CreationForm() {
     }, [dispatch]);
 
     const change = (e) => {
-        fn.handleChange(e, games, newGame, setNewGame, setErrors)
+        const nameGames = games.map(elem => elem.name)
+        fn.handleChange(e, newGame, setNewGame, setErrors, nameGames)
     };
     
     const remove = (e) => {
-        fn.removeItem(e, setNewGame, newGame)
+        fn.removeItem(e, newGame, setNewGame)
     };
 
     const submit = (e) => {

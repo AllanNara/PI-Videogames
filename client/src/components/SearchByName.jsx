@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { clearState, getGamesName, stateError } from "../redux/action";
+import { clearState, getGamesName, stateError, currentPage } from "../redux/action";
 import Card from "./Card";
 import Load from "./Load";
 import Pagination from "./Pagination";
@@ -17,6 +17,7 @@ export function SearchByName() {
 
     useEffect(() => {
         dispatch(getGamesName(name));
+        dispatch(currentPage(1));
         return () => {
             dispatch(clearState());
             dispatch(stateError(false))

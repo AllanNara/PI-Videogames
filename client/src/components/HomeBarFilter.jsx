@@ -14,21 +14,26 @@ export default function HomeBarFilter({filter, setFilter}) {
         dispatch(currentPage(1))
     };
 
-    const filterBy = (e) => {
-        fn.filterOrigin(e, filter, dispatch, setFilter, isLoading, resetPages)
-    };
-
     const sortResults = (e) => {
-        fn.changeSort(e.target.value, games, dispatch, isLoading, setFilter, filter);
+        dispatch(isLoading(true));
+        fn.changeSort(e, games);
+        fn.handleChange(e, filter, setFilter)
+        setTimeout(() => {dispatch(isLoading(false))}, 600);
         resetPages();
     };
 
     const change = (e) => {
-        fn.handleChangeHome(e, filter, dispatch, isLoading, setFilter, resetPages)
+        dispatch(isLoading(true));
+        fn.handleChange(e, filter, setFilter)
+        setTimeout(() => {dispatch(isLoading(false))}, 600);
+        resetPages();
     };
     
     const remove = (e) => {
-        fn.removeItemHome(e, dispatch, isLoading, setFilter, filter, resetPages)
+        dispatch(isLoading(true));
+        fn.removeItem(e, filter, setFilter);
+        setTimeout(() => {dispatch(isLoading(false))}, 600);
+        resetPages();
     };
 
 
@@ -38,7 +43,7 @@ export default function HomeBarFilter({filter, setFilter}) {
                 <label>Filtrar por origen:</label>
                 <select 
                     name="isData"
-                    onChange={filterBy} 
+                    onChange={change} 
                     value={filter.isData}
                     disabled={loading? true : false}
                     >

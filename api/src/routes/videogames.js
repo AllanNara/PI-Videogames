@@ -10,7 +10,7 @@ router.get('/', async (req, res, next) => {
     
     try {
         const options = name ? 
-        { include: Genre, where: {name: {[Op.substring]: name }} }
+        { include: Genre, where: {name: {[Op.iLike]: name }} }
         : { include: Genre };
 
         const callDataBase = await Videogame.findAll(options);
@@ -42,7 +42,7 @@ router.get('/', async (req, res, next) => {
             };      
         };
 
-        const final = [...resultApi, ...resultDataBase];
+        const final = [...resultDataBase, ...resultApi];
         const dataFinal = [];
         final.forEach(elem => {
             let allGenres = elem.genres.map(e => e.name);
@@ -56,9 +56,11 @@ router.get('/', async (req, res, next) => {
             })
         });
 
-        dataFinal.sort((a, b) => {
-            return b.rating - a.rating
-        });
+        if(!name) {
+            dataFinal.sort((a, b) => {
+                return b.rating - a.rating
+            });
+        };
         
         return !name ? 
         res.json(dataFinal) 
