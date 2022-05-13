@@ -7,7 +7,6 @@ import {
     IS_LOADING, 
     CLEAR_STATE,
     GET_ALL_GENRES,
-    GET_ALL_PLATFORMS,
     ERROR_EXISTS,
     CURRENT_PAGE
 } from "../action-types";
@@ -66,16 +65,6 @@ export function getAllGenres() {
         axios.get(`http://localhost:3001/genres`)
             .then(response => {dispatch({
                 type:GET_ALL_GENRES,
-                payload: response.data
-            })})
-    }
-};
-
-export function getAllPlatforms() {
-    return(dispatch) => {
-        axios.get(`http://localhost:3001/platforms`)
-            .then(response => {dispatch({
-                type: GET_ALL_PLATFORMS,
                 payload: response.data
             })})
     }

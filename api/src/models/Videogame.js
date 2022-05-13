@@ -44,11 +44,11 @@ module.exports = (sequelize) => {
     //APARTADO PARA IMAGEN
     image: {
       type: DataTypes.TEXT
+    },
+    platforms: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: false,
     }
-    // platforms: {
-    //   type: DataTypes.ARRAY(...),
-    //   allowNull: false,
-    // }
   },
   {
     timestamps: false

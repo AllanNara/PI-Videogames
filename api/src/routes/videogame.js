@@ -3,7 +3,7 @@ const axios = require('axios');
 const { Router } = require('express');
 const router = Router();
 const { API_KEY } = process.env;
-const { Videogame, Genre, Platform } = require('../db')  
+const { Videogame, Genre } = require('../db')  
 
 router.get('/:idVideogame', async (req, res, next) => {
     const { idVideogame } = req.params;
@@ -12,7 +12,7 @@ router.get('/:idVideogame', async (req, res, next) => {
         let findById;
         let isFromDB;
         if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idVideogame)){
-            const inDataBase = await Videogame.findByPk(idVideogame, { include: [Genre, Platform] });
+            const inDataBase = await Videogame.findByPk(idVideogame, { include: [Genre] });
             findById = inDataBase ? inDataBase.toJSON() : null;
             isFromDB = true;
         } else if(!/^[a-zA-Z\s]*$/.test(idVideogame)){
@@ -46,19 +46,13 @@ router.post('/', async (req, res, next) => {
         let genresGame = req.body.genres.map(elem => Genre.findOne({
             where: { name: elem }
         }));
-        let platformsGame = req.body.platforms.map(elem => Platform.findOne({
-            where: { name: elem }
-        }));
-
+        
         await Promise.all(genresGame).then(e => {
             let data = e.map(dts => dts.toJSON());
             data.forEach(async e => await newVideogame.addGenre(e.id));
-        });
-        await Promise.all(platformsGame).then(e => {
-            let data = e.map(dts => dts.toJSON());
-            data.forEach(async e => await newVideogame.addPlatform(e.id));
             res.send(newVideogame.toJSON().id);
         });
+        
     } catch (error) {
         next(error);
     };

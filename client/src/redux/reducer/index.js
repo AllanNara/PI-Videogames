@@ -6,7 +6,6 @@ import {
     IS_LOADING, 
     CLEAR_STATE,
     GET_ALL_GENRES,
-    GET_ALL_PLATFORMS,
     ERROR_EXISTS,
     CURRENT_PAGE
 } from "../action-types";
@@ -16,7 +15,7 @@ const initialState = {
     allVideogames: [],
     gameDetail: {},
     allGenres: [],
-    allPlatforms: [],
+    allPlatforms: ['Atari',  'GameBoy', 'Mobile', 'Nintendo', 'Other', 'PC', 'PlayStation', 'Wii', 'Xbox'],
     createdGames: [],
     pagination: 1,
     gamesPerPag: 15,
@@ -45,11 +44,6 @@ export default function rootReducer(state = initialState, { type, payload }) {
             return {
                 ...state,
                 allGenres: payload
-            };            
-        case GET_ALL_PLATFORMS:
-            return {
-                ...state,
-                allPlatforms: payload
             };
         case POST_NEW_GAME:
             return {

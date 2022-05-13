@@ -20,6 +20,14 @@ export default function GameDetail() {
         }
     },[id, dispatch])
 
+    function* generatorKey() {
+        let number = 100000;
+        while(true) {
+            number++;
+            yield number
+        }
+    };
+    const keyForChild = generatorKey();
 
     return ( 
         <>
@@ -52,7 +60,7 @@ export default function GameDetail() {
                                 <ul>
                                     {detail.platforms ?
                                     detail.platforms.length ?
-                                    detail.platforms.map(elem => <li key={elem.id}>{elem.name}</li>) : <li>No existen plataformas asociadas</li>
+                                    detail.platforms.map(plat => <li key={keyForChild.next().value}>{plat.name ? plat.name : plat}</li>) : <li>No existen plataformas asociadas</li>
                                     : <li>Cargando plataformas...</li>}
                                 </ul>
                             </div>

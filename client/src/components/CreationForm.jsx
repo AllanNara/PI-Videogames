@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { postNewGame, getAllGenres, getAllPlatforms, getVideogames } from "../redux/action";
+import { postNewGame, getAllGenres, getVideogames } from "../redux/action";
 import './CreationForm.css'
 import img from '../img/videogame.png'
 
@@ -21,12 +21,12 @@ export default function CreationForm() {
         image: '',
         released: new Date().toISOString().split('T')[0]
     });
-    
+
     const nameGames = games.map(elem => elem.name)
 
     useEffect(() => {
         dispatch(getAllGenres());
-        dispatch(getAllPlatforms());
+        // dispatch(getAllPlatforms());
         dispatch(getVideogames())
     }, [dispatch]);
 
@@ -207,7 +207,7 @@ export default function CreationForm() {
                     >
                     <option value="DEFAULT" disabled>Select...</option>
                     {platformsList.length ? platformsList.map(plat =>{
-                        return <option key={plat.id}>{plat.name}</option>
+                        return <option key={keyForChild.next().value}>{plat}</option>
                     }) : null}
                 </select>
                 {errors.platforms ? <p className={'danger'}>{errors.platforms}</p> : null}      

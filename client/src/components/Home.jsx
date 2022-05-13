@@ -148,12 +148,13 @@ export default function Main() {
             yield number
         }
     };
-
+    
+    const keyForChild = generatorKey();
+    
     function resetPages() {
         dispatch(currentPage(1))
     }
 
-    const keyForChild = generatorKey();
 
     if((existInDB === undefined && filter.isData === '1') ||
      (!preRender.length && filter.genresInclude.length)) {
