@@ -140,7 +140,8 @@ function sortByGenre(gameGenres, selectGenres) {
 
 const keyForChild = generatorKey();
 
-module.exports = {
+
+const fn = {
     keyForChild,
     validation,
     changeSort,
@@ -148,3 +149,14 @@ module.exports = {
     removeItem,
     handleChange
 };
+
+export default fn
+
+// module.exports = {
+//     keyForChild,
+//     validation,
+//     changeSort,
+//     sortByGenre,
+//     removeItem,
+//     handleChange
+// };

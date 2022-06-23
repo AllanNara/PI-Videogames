@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Card from "./Card";
 import Pagination from "./Pagination";
 import Load from "./Load";
-import * as fn from "./controllers"
+import fn from "./controllers"
 import './styles/Home.css';
 import HomeBarFilter from "./HomeBarFilter";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { isLoading, currentPage } from "../redux/action";
 import { useDispatch, useSelector } from 'react-redux';
-import * as fn from "./controllers"
+import fn from "./controllers"
 
 
 export default function HomeBarFilter({filter, setFilter}) {

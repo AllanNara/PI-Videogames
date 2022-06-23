@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getGameDetail, clearState, stateError } from "../redux/action";
 import Load from "./Load";
-import * as fn from './controllers'
+import fn from './controllers'
 import './styles/GameDetail.css'
 
 export default function GameDetail() {

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { postNewGame, getAllGenres, getVideogames } from "../redux/action";
 import img from './img/videogame.png';
 import './styles/CreationForm.css';
-import * as fn from './controllers'
+import fn from './controllers'
 
 export default function CreationForm() {
     const dispatch = useDispatch();
